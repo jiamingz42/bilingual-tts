@@ -5,7 +5,7 @@ import argparse
 import json
 import tempfile
 
-def create_audio(sentences, target_key="jp", translation_key="en", interval=1000, target_repeat=3, translation_repeat=1):
+def create_audio(sentences, output_file, target_key="jp", translation_key="en", interval=1000, target_repeat=3, translation_repeat=1):
     final_audio = AudioSegment.silent(duration=0)
 
     # Load the "ding" sound
@@ -37,12 +37,13 @@ def create_audio(sentences, target_key="jp", translation_key="en", interval=1000
         final_audio += combined_audio + ding_sound
 
     # Save the final audio
-    final_audio.export("final_audio.mp3", format="mp3")
+    final_audio.export(output_file, format="mp3")
 
 def main():
     # Create a parser object
     parser = argparse.ArgumentParser(description='Create audio from sentences.')
     parser.add_argument('-i', '--input', type=str, required=True, help='Input JSON file with sentences')
+    parser.add_argument('-o', '--output', type=str, required=True, help='Output MP3 file')
 
     # Parse the arguments
     args = parser.parse_args()
@@ -55,7 +56,12 @@ def main():
         print(f"Error: {args.input} is not a valid JSON file.")
         exit(1)
 
-    create_audio(sentences)
+    # Validate the output file
+    if not args.output.endswith('.mp3'):
+        print(f"Error: {args.output} is not a valid MP3 file.")
+        exit(1)
+
+    create_audio(sentences, args.output)
 
 if __name__ == '__main__':
     main()
