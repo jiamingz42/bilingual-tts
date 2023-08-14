@@ -24,7 +24,7 @@ def create_audio(
     transition_sound = AudioSegment.from_file(transition_sound)
 
     # Iterate through the sentences with a progress bar and print the currently processing sentence
-    for sentence in tqdm(sentences, ncols='100%'):
+    for sentence in tqdm(sentences):
         tqdm.write(sentence[target_key])
         tqdm.set_postfix_str(f"Processing: {sentence[target_key]}")
         target_text = sentence[target_key]
