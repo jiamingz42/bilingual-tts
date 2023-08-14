@@ -1,3 +1,5 @@
 gtts
 pydub
 tqdm
+pysrt
+deepl
