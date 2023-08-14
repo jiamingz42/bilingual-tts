@@ -25,32 +25,33 @@ def create_audio(
 
     # Iterate through the sentences with a progress bar and print the currently processing sentence
     with tqdm(total=len(sentences)) as pbar:
-        for sentence in sentences:
-            pbar.write(sentence[target_key])
+        for i, sentence in enumerate(sentences, 1):
+            pbar.write(f"{i:03d} {sentence[target_key]}")
             pbar.set_postfix_str(f"Processing: {sentence[target_key]}")
             pbar.update()
-        target_text = sentence[target_key]
-        translation_text = sentence[tr_key]
 
-        # Convert target language text to speech
-        target_tts = gTTS(text=target_text, lang=target_lang)
-        with tempfile.NamedTemporaryFile(delete=False) as target_file:
-            target_tts.save(target_file.name)
-            target_audio = AudioSegment.from_mp3(target_file.name)
+            target_text = sentence[target_key]
+            translation_text = sentence[tr_key]
 
-        # Convert translation text to speech
-        translation_tts = gTTS(text=translation_text, lang="en")
-        with tempfile.NamedTemporaryFile(delete=False) as translation_file:
-            translation_tts.save(translation_file.name)
-            translation_audio = AudioSegment.from_mp3(translation_file.name)
+            # Convert target language text to speech
+            target_tts = gTTS(text=target_text, lang=target_lang)
+            with tempfile.NamedTemporaryFile(delete=False) as target_file:
+                target_tts.save(target_file.name)
+                target_audio = AudioSegment.from_mp3(target_file.name)
 
-        # Repeat and combine the audio with interval between repetitions
-        combined_audio = (target_audio + AudioSegment.silent(duration=interval)) * target_repeat
-        combined_audio += translation_audio * translation_repeat + AudioSegment.silent(duration=interval)
-        combined_audio += target_audio
+            # Convert translation text to speech
+            translation_tts = gTTS(text=translation_text, lang="en")
+            with tempfile.NamedTemporaryFile(delete=False) as translation_file:
+                translation_tts.save(translation_file.name)
+                translation_audio = AudioSegment.from_mp3(translation_file.name)
 
-        # Add to the final audio with a "ding" sound
-        final_audio += combined_audio + transition_sound
+            # Repeat and combine the audio with interval between repetitions
+            combined_audio = (target_audio + AudioSegment.silent(duration=interval)) * target_repeat
+            combined_audio += translation_audio * translation_repeat + AudioSegment.silent(duration=interval)
+            combined_audio += target_audio
+
+            # Add to the final audio with a "ding" sound
+            final_audio += combined_audio + transition_sound
 
     # Save the final audio
     final_audio.export(output_file, format="mp3")
