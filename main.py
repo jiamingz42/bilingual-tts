@@ -41,8 +41,8 @@ def create_audio(
             translation_tts.save(translation_file.name)
             translation_audio = AudioSegment.from_mp3(translation_file.name)
 
-        # Repeat and combine the audio
-        combined_audio = target_audio * target_repeat + AudioSegment.silent(duration=interval)
+        # Repeat and combine the audio with interval between repetitions
+        combined_audio = (target_audio + AudioSegment.silent(duration=interval)) * target_repeat
         combined_audio += translation_audio * translation_repeat + AudioSegment.silent(duration=interval)
         combined_audio += target_audio
 
