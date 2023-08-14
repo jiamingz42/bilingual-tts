@@ -9,7 +9,7 @@ import os
 import pysrt
 import deepl
 
-def create_audio_from_audio(input_audio, subtitle_file, output_file, transition_sound, repeat_count, tr_lang, verbose):
+def create_audio_from_audio(input_audio, subtitle_file, output_file, transition_sound, repeat_count, tr_lang, verbose, translate_func=deepl.translate_text):
     # Check if the DEEPL_API_KEY environment variable is set
     if 'DEEPL_API_KEY' not in os.environ:
         print("Error: The DEEPL_API_KEY environment variable is not set. Please set it to your DeepL API key.")
@@ -29,8 +29,8 @@ def create_audio_from_audio(input_audio, subtitle_file, output_file, transition_
 
     # Iterate over the sentences in the subtitle file
     for sentence in tqdm(sentences, desc='Processing sentences', disable=not verbose):
-        # Translate the sentence using the DeepL API
-        translation = deepl.translate_text(sentence, target_lang=tr_lang)
+        # Translate the sentence using the provided translate function
+        translation = translate_func(sentence, target_lang=tr_lang)
 
         # Convert the translation into speech using gTTS
         tts = gTTS(text=translation, lang=tr_lang)
