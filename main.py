@@ -1,6 +1,7 @@
 from gtts import gTTS
 from pydub import AudioSegment
 
+import argparse
 import json
 import tempfile
 
@@ -38,8 +39,19 @@ def create_audio(sentences, target_key="jp", translation_key="en", interval=1000
     # Save the final audio
     final_audio.export("final_audio.mp3", format="mp3")
 
-# Example usage
-with open('sentences.json') as f:
-    sentences = json.load(f)
+# Create a parser object
+parser = argparse.ArgumentParser(description='Create audio from sentences.')
+parser.add_argument('-i', '--input', type=str, required=True, help='Input JSON file with sentences')
+
+# Parse the arguments
+args = parser.parse_args()
+
+# Validate the input file
+try:
+    with open(args.input) as f:
+        sentences = json.load(f)
+except json.JSONDecodeError:
+    print(f"Error: {args.input} is not a valid JSON file.")
+    exit(1)
 
 create_audio(sentences)
