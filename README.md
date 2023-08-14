@@ -4,25 +4,29 @@ This script is used to create an audio file from a set of sentences. The sentenc
 
 # Usage
 
-Here are three examples of how to use this script:
+This script now supports two subcommands: `fromtext` and `fromaudio`.
 
-1. Basic usage with default parameters:
+Here are examples of how to use these subcommands:
 
-```bash
-source env/bin/activate
-python main.py --input sentences.json --output output.mp3
-```
-
-2. Specify the target language and translation language:
+1. Basic usage with default parameters for `fromtext`:
 
 ```bash
 source env/bin/activate
-python main.py --input sentences.json --output output.mp3 --target-lang ja --tr-lang en
+python main.py fromtext --input sentences.json --output output.mp3
 ```
 
-3. Specify the interval and repetition parameters:
+2. Specify the target language and translation language for `fromtext`:
 
 ```bash
 source env/bin/activate
-python main.py --input sentences.json --output output.mp3 --interval 2000 --target-repeat 2 --translation-repeat 2
+python main.py fromtext --input sentences.json --output output.mp3 --target-lang ja --tr-lang en
 ```
+
+3. Specify the interval and repetition parameters for `fromtext`:
+
+```bash
+source env/bin/activate
+python main.py fromtext --input sentences.json --output output.mp3 --interval 2000 --target-repeat 2 --translation-repeat 2
+```
+
+The `fromaudio` subcommand is currently under development.
