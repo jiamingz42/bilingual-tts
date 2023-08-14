@@ -1,5 +1,6 @@
 from gtts import gTTS
 from pydub import AudioSegment
+from tqdm import tqdm
 
 import argparse
 import json
@@ -22,8 +23,9 @@ def create_audio(
     # Load the transition sound
     transition_sound = AudioSegment.from_file(transition_sound)
 
-    # Iterate through the sentences
-    for sentence in sentences:
+    # Iterate through the sentences with a progress bar
+    for sentence in tqdm(sentences):
+        print(sentence)
         target_text = sentence[target_key]
         translation_text = sentence[tr_key]
 
