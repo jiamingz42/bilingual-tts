@@ -5,11 +5,22 @@ import argparse
 import json
 import tempfile
 
-def create_audio(sentences, output_file, transition_sound, target_lang, target_key, tr_lang, tr_key, interval=1000, target_repeat=3, translation_repeat=1):
+def create_audio(
+        sentences,
+        output_file,
+        transition_sound,
+        target_lang,
+        target_key,
+        tr_lang,
+        tr_key,
+        interval=1000,
+        target_repeat=3,
+        translation_repeat=1
+    ):
     final_audio = AudioSegment.silent(duration=0)
 
     # Load the transition sound
-    ding_sound = AudioSegment.from_file(transition_sound)
+    transition_sound = AudioSegment.from_file(transition_sound)
 
     # Iterate through the sentences
     for sentence in sentences:
@@ -34,7 +45,7 @@ def create_audio(sentences, output_file, transition_sound, target_lang, target_k
         combined_audio += target_audio
 
         # Add to the final audio with a "ding" sound
-        final_audio += combined_audio + ding_sound
+        final_audio += combined_audio + transition_sound
 
     # Save the final audio
     final_audio.export(output_file, format="mp3")
@@ -70,7 +81,15 @@ def main():
     target_lang_key = args.target_lang_key if args.target_lang_key else args.target_lang
     tr_lang_key = args.tr_lang_key if args.tr_lang_key else args.tr_lang
 
-    create_audio(sentences, args.output, args.transition_sound, args.target_lang, target_lang_key, args.tr_lang, tr_lang_key)
+    create_audio(
+        sentences,
+        args.output,
+        args.transition_sound,
+        args.target_lang,
+        target_lang_key,
+        args.tr_lang,
+        tr_lang_key
+    )
 
 if __name__ == '__main__':
     main()
