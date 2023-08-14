@@ -62,7 +62,7 @@ def main():
     # Create a parser object
     parser = argparse.ArgumentParser(description='Create audio from sentences.')
     parser.add_argument('-i', '--input', type=str, required=True, help='Input JSON file with sentences')
-    parser.add_argument('-o', '--output', type=str, required=True, help='Output MP3 file')
+    parser.add_argument('-o', '--output', type=str, required=False, help='Output MP3 file (optional, defaults to input file name with .mp3 extension if not provided)')
     parser.add_argument('-t', '--transition-sound', type=str, default='ding.wav', help='Transition sound file')
     parser.add_argument('--target-lang', type=str, default='ja', help='Target language')
     parser.add_argument('--target-lang-key', type=str, default=None, help='Target language key in the input JSON file')
@@ -83,6 +83,10 @@ def main():
     except json.JSONDecodeError:
         print(f"Error: {args.input} is not a valid JSON file.")
         exit(1)
+
+    # If output file is not provided, derive it from the input file
+    if args.output is None:
+        args.output = args.input.rsplit('.', 1)[0] + '.mp3'
 
     # Validate the output file
     if not args.output.endswith('.mp3'):
