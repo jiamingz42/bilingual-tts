@@ -13,6 +13,7 @@ def main():
 
     # Create a parser for the "fromaudio" command
     parser_fromaudio = subparsers.add_parser('fromaudio')
+    parser_fromaudio.add_argument('--tr-strategy', default='deepl', help='Translation strategy to use. Options are "deepl" and "fake". Default is "deepl".')
     parser_fromaudio.set_defaults(func=fromaudio_main)
 
     # Parse the arguments
