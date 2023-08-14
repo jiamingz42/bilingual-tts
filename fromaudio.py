@@ -10,6 +10,10 @@ import pysrt
 import deepl
 
 def create_audio_from_audio(input_audio, subtitle_file, output_file, transition_sound, repeat_count, tr_lang, verbose):
+    # Check if the DEEPL_API_KEY environment variable is set
+    if 'DEEPL_API_KEY' not in os.environ:
+        print("Error: The DEEPL_API_KEY environment variable is not set. Please set it to your DeepL API key.")
+        exit(1)
     # Load the input audio file using AudioSegment.from_file
     input_audio = AudioSegment.from_file(input_audio)
 
