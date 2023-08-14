@@ -13,9 +13,9 @@ def create_audio(
         target_key,
         tr_lang,
         tr_key,
-        interval=1000,
-        target_repeat=3,
-        translation_repeat=1
+        interval,
+        target_repeat,
+        translation_repeat
     ):
     final_audio = AudioSegment.silent(duration=0)
 
@@ -60,6 +60,9 @@ def main():
     parser.add_argument('--target-lang-key', type=str, default=None, help='Target language key in the input JSON file')
     parser.add_argument('--tr-lang', type=str, default='en', help='Translation language')
     parser.add_argument('--tr-lang-key', type=str, default=None, help='Translation language key in the input JSON file')
+    parser.add_argument('--interval', type=int, default=1000, help='Interval between repetitions in milliseconds')
+    parser.add_argument('--target-repeat', type=int, default=3, help='Number of times to repeat the target language')
+    parser.add_argument('--translation-repeat', type=int, default=1, help='Number of times to repeat the translation')
 
     # Parse the arguments
     args = parser.parse_args()
@@ -88,7 +91,10 @@ def main():
         args.target_lang,
         target_lang_key,
         args.tr_lang,
-        tr_lang_key
+        tr_lang_key,
+        args.interval,
+        args.target_repeat,
+        args.translation_repeat
     )
 
 if __name__ == '__main__':
