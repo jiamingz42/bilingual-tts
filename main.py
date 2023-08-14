@@ -16,7 +16,8 @@ def create_audio(
         tr_key,
         interval,
         target_repeat,
-        translation_repeat
+        translation_repeat,
+        verbose
     ):
     final_audio = AudioSegment.silent(duration=0)
 
@@ -26,7 +27,8 @@ def create_audio(
     # Iterate through the sentences with a progress bar and print the currently processing sentence
     with tqdm(total=len(sentences)) as pbar:
         for i, sentence in enumerate(sentences, 1):
-            pbar.write(f"{i:03d} {sentence[target_key]}")
+            if verbose:
+                pbar.write(f"{i:03d} {sentence[target_key]}")
             pbar.set_postfix_str(f"Processing: {sentence[target_key]}")
             pbar.update()
 
@@ -69,6 +71,7 @@ def main():
     parser.add_argument('--interval', type=int, default=1000, help='Interval between repetitions in milliseconds')
     parser.add_argument('--target-repeat', type=int, default=3, help='Number of times to repeat the target language')
     parser.add_argument('--translation-repeat', type=int, default=1, help='Number of times to repeat the translation')
+    parser.add_argument('--verbose', action='store_true', help='Print verbose output')
 
     # Parse the arguments
     args = parser.parse_args()
@@ -100,7 +103,8 @@ def main():
         tr_lang_key,
         args.interval,
         args.target_repeat,
-        args.translation_repeat
+        args.translation_repeat,
+        args.verbose
     )
 
 if __name__ == '__main__':
