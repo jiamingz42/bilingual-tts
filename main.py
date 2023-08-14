@@ -39,19 +39,23 @@ def create_audio(sentences, target_key="jp", translation_key="en", interval=1000
     # Save the final audio
     final_audio.export("final_audio.mp3", format="mp3")
 
-# Create a parser object
-parser = argparse.ArgumentParser(description='Create audio from sentences.')
-parser.add_argument('-i', '--input', type=str, required=True, help='Input JSON file with sentences')
+def main():
+    # Create a parser object
+    parser = argparse.ArgumentParser(description='Create audio from sentences.')
+    parser.add_argument('-i', '--input', type=str, required=True, help='Input JSON file with sentences')
 
-# Parse the arguments
-args = parser.parse_args()
+    # Parse the arguments
+    args = parser.parse_args()
 
-# Validate the input file
-try:
-    with open(args.input) as f:
-        sentences = json.load(f)
-except json.JSONDecodeError:
-    print(f"Error: {args.input} is not a valid JSON file.")
-    exit(1)
+    # Validate the input file
+    try:
+        with open(args.input) as f:
+            sentences = json.load(f)
+    except json.JSONDecodeError:
+        print(f"Error: {args.input} is not a valid JSON file.")
+        exit(1)
 
-create_audio(sentences)
+    create_audio(sentences)
+
+if __name__ == '__main__':
+    main()
