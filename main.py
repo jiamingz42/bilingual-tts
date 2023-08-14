@@ -25,7 +25,6 @@ def create_audio(
 
     # Iterate through the sentences with a progress bar
     for sentence in tqdm(sentences):
-        print(sentence)
         target_text = sentence[target_key]
         translation_text = sentence[tr_key]
 
