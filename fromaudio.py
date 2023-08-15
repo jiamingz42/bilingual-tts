@@ -86,7 +86,7 @@ def create_audio_from_audio(
 
     # Concatenate the audio segments into a single audio file
     final_audio = pydub.AudioSegment.empty()
-    for audio_segment in audio_segments:
+    for audio_segment in tqdm(audio_segments, desc='Processing audio segments'):
         # Append the transition sound to each audio segment
         final_audio += audio_segment + transition_sound
 
