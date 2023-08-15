@@ -75,14 +75,14 @@ def create_audio_from_audio(
         # Append the repeated audio segment to the list of audio segments
         audio_segments.append(repeated_audio_segment)
 
+    # Load the transition sound
+    transition_sound = AudioSegment.from_file(transition_sound)
+
     # Concatenate the audio segments into a single audio file
     final_audio = pydub.AudioSegment.empty()
     for audio_segment in audio_segments:
-        final_audio += audio_segment
-
-    # Append the transition sound to the final audio
-    transition_sound = AudioSegment.from_file(transition_sound)
-    final_audio += transition_sound
+        # Append the transition sound to each audio segment
+        final_audio += audio_segment + transition_sound
 
     # Save the final audio to the output file
     final_audio.export(output_file, format='mp3')
