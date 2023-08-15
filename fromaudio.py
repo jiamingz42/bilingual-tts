@@ -96,7 +96,8 @@ def fromaudio_main(args):
         exit(1)
 
     if args.tr_strategy == "deepl":
-        translate_func = deepl.translate_text
+        translator = deepl.Translator(os.environ['DEEPL_API_KEY'])
+        translate_func = translator.translate_text
     else:
         translate_func = fake_translate_func
 
