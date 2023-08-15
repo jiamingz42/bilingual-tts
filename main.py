@@ -18,7 +18,7 @@ def main():
     parser_fromaudio.add_argument('--output-file', help='Output audio file. If not provided, it will be derived from the input audio file.')
     parser_fromaudio.add_argument('--transition-sound', required=True, help='Transition sound file.')
     parser_fromaudio.add_argument('--repeat-count', type=int, default=1, help='Number of times to repeat the audio.')
-    parser_fromaudio.add_argument('--tr-lang', default='en', help='Translation language. Default is "en".')
+    parser_fromaudio.add_argument('--tr-lang', default='EN-US', help='Translation language. Default is "en".')
     parser_fromaudio.add_argument('--verbose', action='store_true', help='Enable verbose output.')
     parser_fromaudio.add_argument('--tr-strategy', default='deepl', help='Translation strategy to use. Options are "deepl" and "fake". Default is "deepl".')
     parser_fromaudio.set_defaults(func=fromaudio_main)
