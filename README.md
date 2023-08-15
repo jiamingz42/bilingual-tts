@@ -43,3 +43,5 @@ Here is an example of how to use the `fromaudio` subcommand:
 source env/bin/activate
 python main.py fromaudio --input-audio input.mp3 --subtitle-file subtitles.srt --output-file output.mp3 --transition-sound ding.mp3 --repeat-count 2 --tr-lang en
 ```
+
+If the `--subtitle-file` or `--output-file` options are not provided, they will be derived from the `--input-audio` file. If the `--output-file` option is a directory, the output file will be written to that directory with a name derived from the `--input-audio` file.
