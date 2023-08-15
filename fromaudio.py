@@ -115,6 +115,10 @@ def fromaudio_main(args):
         print(f"Error: Audio file {args.input_audio} does not exist.")
         exit(1)
 
+    if not os.path.isfile(args.transition_sound):
+        print(f"Error: Transition sound file {args.transition_sound} does not exist.")
+        exit(1)
+
     # If output file is not provided, derive it from the input audio file
     if args.output_file is None:
         args.output_file = os.path.join(os.path.dirname(args.input_audio), os.path.basename(args.input_audio).rsplit('.', 1)[0] + '.mp3')
