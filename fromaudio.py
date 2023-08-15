@@ -8,6 +8,7 @@ import pydub
 import os
 import pysrt
 import deepl
+import hashlib
 
 def fake_translate_func(text, target_lang):
     return "Hello world"
@@ -61,8 +62,11 @@ def create_audio_from_audio(
         # Use the text attribute of the TextResult object
         tts = gTTS(text=translation.text, lang=tr_lang)
 
-        # Save the translated speech to a temporary file
-        tts_file = os.path.join(temp_dir, f'{subtitle.text}.mp3')
+        # Generate a hash of the subtitle text
+        subtitle_hash = hashlib.md5(subtitle.text.encode()).hexdigest()
+
+        # Save the translated speech to a temporary file using the hash as the filename
+        tts_file = os.path.join(temp_dir, f'{subtitle_hash}.mp3')
         tts.save(tts_file)
 
         # Load the translated speech as an audio segment
