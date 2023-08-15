@@ -122,8 +122,12 @@ def fromaudio_main(args):
     # If output file is not provided, derive it from the input audio file
     if args.output_file is None:
         args.output_file = os.path.join(os.path.dirname(args.input_audio), os.path.basename(args.input_audio).rsplit('.', 1)[0] + '.mp3')
+        if args.output_file == args.input_audio:
+            args.output_file = args.output_file.rsplit('.', 1)[0] + '_out.mp3'
     elif os.path.isdir(args.output_file):
         args.output_file = os.path.join(args.output_file, os.path.basename(args.input_audio).rsplit('.', 1)[0] + '.mp3')
+        if args.output_file == args.input_audio:
+            args.output_file = args.output_file.rsplit('.', 1)[0] + '_out.mp3'
 
     create_audio_from_audio(
         args.input_audio,
