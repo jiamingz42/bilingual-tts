@@ -58,8 +58,8 @@ def create_audio_from_audio(
         translation = translate_func(subtitle.text, target_lang=tr_lang)
 
         # Convert the translation into speech using gTTS
-        # Convert the TextResult object to a string
-        tts = gTTS(text=str(translation), lang=tr_lang)
+        # Use the text attribute of the TextResult object
+        tts = gTTS(text=translation.text, lang=tr_lang)
 
         # Save the translated speech to a temporary file
         tts_file = os.path.join(temp_dir, f'{subtitle.text}.mp3')
