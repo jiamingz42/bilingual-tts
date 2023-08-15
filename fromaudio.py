@@ -22,16 +22,17 @@ def create_audio_from_audio(
     verbose,
     translate_func,
 ):
-    # Check if the DEEPL_API_KEY environment variable is set
-    if 'DEEPL_API_KEY' not in os.environ:
-        print("Error: The DEEPL_API_KEY environment variable is not set. Please set it to your DeepL API key.")
-        exit(1)
     # Load the input audio file using AudioSegment.from_file
     input_audio = AudioSegment.from_file(input_audio)
+    print("Loaded input audio")
 
     # Load the subtitle file and parse it into a list of sentences
     subtitle_data = pysrt.open(subtitle_file)
     sentences = [subtitle.text for subtitle in subtitle_data]
+
+    if verbose:
+        for i, sentence in enumerate(sentences):
+            print(f"{i:03d} {sentence}")
 
     # Create a temporary directory to store the audio segments
     temp_dir = tempfile.mkdtemp()
@@ -40,7 +41,7 @@ def create_audio_from_audio(
     audio_segments = []
 
     # Iterate over the sentences in the subtitle file
-    for sentence in tqdm(sentences, desc='Processing sentences', disable=not verbose):
+    for sentence in tqdm(sentences, desc='Processing sentences'):
         # Translate the sentence using the provided translate function
         translation = translate_func(sentence, target_lang=tr_lang)
 
@@ -70,6 +71,12 @@ def create_audio_from_audio(
     final_audio.export(output_file, format='mp3')
 
 def fromaudio_main(args):
+    print("Generating bilingual TTS from audio ...")
+
+    if 'DEEPL_API_KEY' not in os.environ:
+        print("Error: The DEEPL_API_KEY environment variable is not set. Please set it to your DeepL API key.")
+        exit(1)
+
     if args.tr_strategy == "deepl":
         translate_func = deepl.translate_text
     else:
