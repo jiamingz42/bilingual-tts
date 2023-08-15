@@ -41,22 +41,39 @@ def create_audio_from_audio(
     audio_segments = []
 
     # Iterate over the sentences in the subtitle file
-    for sentence in tqdm(sentences, desc='Processing sentences'):
-        # Translate the sentence using the provided translate function
-        translation = translate_func(sentence, target_lang=tr_lang)
+    for subtitle in tqdm(subtitle_data, desc='Processing sentences'):
+        # Extract the start and end times from the subtitle
+        start_time = subtitle.start.ordinal / 1000  # Convert from milliseconds to seconds
+        end_time = subtitle.end.ordinal / 1000  # Convert from milliseconds to seconds
+
+        # Extract the corresponding audio segment from the input audio
+        audio_segment = input_audio[start_time * 1000:end_time * 1000]  # Convert from seconds to milliseconds
+
+        # Repeat the audio segment three times with a silent interval in between
+        repeated_audio_segment = audio_segment + AudioSegment.silent(duration=1000)  # 1 second silent interval
+        repeated_audio_segment = repeated_audio_segment * 3
+
+        # Translate the subtitle text using the provided translate function
+        translation = translate_func(subtitle.text, target_lang=tr_lang)
 
         # Convert the translation into speech using gTTS
         tts = gTTS(text=translation, lang=tr_lang)
 
         # Save the translated speech to a temporary file
-        tts_file = os.path.join(temp_dir, f'{sentence}.mp3')
+        tts_file = os.path.join(temp_dir, f'{subtitle.text}.mp3')
         tts.save(tts_file)
 
         # Load the translated speech as an audio segment
         tts_audio_segment = AudioSegment.from_file(tts_file)
 
-        # Append the translated speech to the list of audio segments
-        audio_segments.append(tts_audio_segment)
+        # Append the TTS translation to the repeated audio segments
+        repeated_audio_segment += tts_audio_segment
+
+        # Append the original extracted audio segment one more time
+        repeated_audio_segment += audio_segment
+
+        # Append the repeated audio segment to the list of audio segments
+        audio_segments.append(repeated_audio_segment)
 
     # Concatenate the audio segments into a single audio file
     final_audio = pydub.AudioSegment.empty()
