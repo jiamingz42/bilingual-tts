@@ -115,9 +115,9 @@ def fromaudio_main(args):
         print(f"Error: Audio file {args.input_audio} does not exist.")
         exit(1)
 
-    # If output file is not provided, derive it from the input audio file
-    if args.output_file is None:
-        args.output_file = args.input_audio.rsplit('.', 1)[0] + '.mp3'
+    # If output file is not provided or it's a directory, derive it from the input audio file
+    if args.output_file is None or os.path.isdir(args.output_file):
+        args.output_file = os.path.join(args.output_file if os.path.isdir(args.output_file) else '', args.input_audio.rsplit('.', 1)[0] + '.mp3')
 
     create_audio_from_audio(
         args.input_audio,
