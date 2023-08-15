@@ -13,9 +13,9 @@ def main():
 
     # Create a parser for the "fromaudio" command
     parser_fromaudio = subparsers.add_parser('fromaudio')
-    parser_fromaudio.add_argument('--input-audio', help='Input audio file to process.')
-    parser_fromaudio.add_argument('--subtitle-file', help='Subtitle file to process.')
-    parser_fromaudio.add_argument('--output-file', help='Output audio file.')
+    parser_fromaudio.add_argument('--input-audio', required=True, help='Input audio file to process.')
+    parser_fromaudio.add_argument('--subtitle-file', required=True, help='Subtitle file to process.')
+    parser_fromaudio.add_argument('--output-file', help='Output audio file. If not provided, it will be derived from the input audio file.')
     parser_fromaudio.add_argument('--transition-sound', help='Transition sound file.')
     parser_fromaudio.add_argument('--repeat-count', type=int, default=1, help='Number of times to repeat the audio.')
     parser_fromaudio.add_argument('--tr-lang', default='en', help='Translation language. Default is "en".')

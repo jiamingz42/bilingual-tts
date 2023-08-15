@@ -75,6 +75,10 @@ def fromaudio_main(args):
     else:
         translate_func = fake_translate_func
 
+    # If output file is not provided, derive it from the input audio file
+    if args.output_file is None:
+        args.output_file = args.input_audio.rsplit('.', 1)[0] + '.mp3'
+
     create_audio_from_audio(
         args.input_audio,
         args.subtitle_file,
