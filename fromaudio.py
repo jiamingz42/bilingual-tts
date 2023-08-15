@@ -102,6 +102,19 @@ def fromaudio_main(args):
     else:
         translate_func = fake_translate_func
 
+    # If subtitle file is not provided, derive it from the input audio file
+    if args.subtitle_file is None:
+        args.subtitle_file = args.input_audio.rsplit('.', 1)[0] + '.srt'
+
+    # Validate if the subtitle file and audio file exist
+    if not os.path.isfile(args.subtitle_file):
+        print(f"Error: Subtitle file {args.subtitle_file} does not exist.")
+        exit(1)
+
+    if not os.path.isfile(args.input_audio):
+        print(f"Error: Audio file {args.input_audio} does not exist.")
+        exit(1)
+
     # If output file is not provided, derive it from the input audio file
     if args.output_file is None:
         args.output_file = args.input_audio.rsplit('.', 1)[0] + '.mp3'
