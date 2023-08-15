@@ -21,6 +21,7 @@ def create_audio_from_audio(
     tr_lang,
     verbose,
     translate_func,
+    interval=500,
 ):
     # Load the input audio file using AudioSegment.from_file
     input_audio = AudioSegment.from_file(input_audio)
@@ -66,11 +67,11 @@ def create_audio_from_audio(
         # Load the translated speech as an audio segment
         tts_audio_segment = AudioSegment.from_file(tts_file)
 
-        # Append the TTS translation to the repeated audio segments
-        repeated_audio_segment += tts_audio_segment
+        # Append the TTS translation to the repeated audio segments with a silent interval
+        repeated_audio_segment += AudioSegment.silent(duration=interval) + tts_audio_segment
 
-        # Append the original extracted audio segment one more time
-        repeated_audio_segment += audio_segment
+        # Append the original extracted audio segment one more time with a silent interval
+        repeated_audio_segment += AudioSegment.silent(duration=interval) + audio_segment
 
         # Append the repeated audio segment to the list of audio segments
         audio_segments.append(repeated_audio_segment)
