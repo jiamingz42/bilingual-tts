@@ -12,7 +12,16 @@ import deepl
 def fake_translate_func(text, target_lang):
     return "Hello world"
 
-def create_audio_from_audio(input_audio, subtitle_file, output_file, transition_sound, repeat_count, tr_lang, verbose, translate_func=deepl.translate_text):
+def create_audio_from_audio(
+    input_audio,
+    subtitle_file,
+    output_file,
+    transition_sound,
+    repeat_count,
+    tr_lang,
+    verbose,
+    translate_func=deepl.translate_text
+):
     # Check if the DEEPL_API_KEY environment variable is set
     if 'DEEPL_API_KEY' not in os.environ:
         print("Error: The DEEPL_API_KEY environment variable is not set. Please set it to your DeepL API key.")
@@ -61,4 +70,12 @@ def create_audio_from_audio(input_audio, subtitle_file, output_file, transition_
     final_audio.export(output_file, format='mp3')
 
 def fromaudio_main(args):
-    create_audio_from_audio(args.input_audio, args.subtitle_file, args.output_file, args.transition_sound, args.repeat_count, args.tr_lang, args.verbose)
+    create_audio_from_audio(
+        args.input_audio,
+        args.subtitle_file,
+        args.output_file,
+        args.transition_sound,
+        args.repeat_count,
+        args.tr_lang,
+        args.verbose
+    )
