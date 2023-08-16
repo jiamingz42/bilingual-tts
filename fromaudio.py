@@ -136,17 +136,6 @@ def fromaudio_main(args):
         exit(1)
 
     # If output file is not provided, derive it from the input audio file
-    def get_output_file_name(input_audio: str, output_file: Optional[str]) -> str:
-        if output_file is None:
-            output_file = os.path.join(os.path.dirname(input_audio), os.path.basename(input_audio).rsplit('.', 1)[0] + '.mp3')
-            if output_file == input_audio:
-                output_file = output_file.rsplit('.', 1)[0] + '_out.mp3'
-        elif os.path.isdir(output_file):
-            output_file = os.path.join(output_file, os.path.basename(input_audio).rsplit('.', 1)[0] + '.mp3')
-            if output_file == input_audio:
-                output_file = output_file.rsplit('.', 1)[0] + '_out.mp3'
-        return output_file
-
     args.output_file = get_output_file_name(args.input_audio, args.output_file)
 
     # Load the subtitle file and parse it into a list of sentences
@@ -163,3 +152,15 @@ def fromaudio_main(args):
         translate_func=translate_func,
         limit=args.limit,
     )
+
+def get_output_file_name(input_audio: str, output_file: Optional[str]) -> str:
+    if output_file is None:
+        output_file = os.path.join(os.path.dirname(input_audio), os.path.basename(input_audio).rsplit('.', 1)[0] + '.mp3')
+        if output_file == input_audio:
+            output_file = output_file.rsplit('.', 1)[0] + '_out.mp3'
+    elif os.path.isdir(output_file):
+        output_file = os.path.join(output_file, os.path.basename(input_audio).rsplit('.', 1)[0] + '.mp3')
+        if output_file == input_audio:
+            output_file = output_file.rsplit('.', 1)[0] + '_out.mp3'
+    return output_file
+
