@@ -29,7 +29,7 @@ source env/bin/activate
 python main.py fromtext --input sentences.json --output output.mp3 --interval 2000 --target-repeat 2 --translation-repeat 2
 ```
 
-The `fromaudio` subcommand is used to create an audio file from an existing audio file and a subtitle file. The subtitle file is translated into the target language using the DeepL API. The translated text is then converted into speech and combined with the original audio to create the final audio file.
+The `fromaudio` subcommand is used to create an audio file from an existing audio file and a subtitle file. The subtitle file, which can be in .srt or .ass format, is translated into the target language using the DeepL API. The translated text is then converted into speech and combined with the original audio to create the final audio file.
 
 Before using the `fromaudio` subcommand, you need to set the `DEEPL_API_KEY` environment variable to your DeepL API key. You can do this in a bash shell with the `export` command:
 
