@@ -15,16 +15,16 @@ def fake_translate_func(text: str, target_lang: str) -> str:
     return "Hello world"
 
 def create_audio_from_audio(
-    input_audio,
-    subtitle_data,
-    output_file,
-    transition_sound,
-    repeat_count,
-    tr_lang,
-    verbose,
-    translate_func,
-    interval=500,
-):
+    input_audio: str,
+    subtitle_data: list,
+    output_file: str,
+    transition_sound: str,
+    repeat_count: int,
+    tr_lang: str,
+    verbose: bool,
+    translate_func: callable,
+    interval: int = 500,
+) -> None:
 
     sentences = [subtitle.text for subtitle in subtitle_data]
 
