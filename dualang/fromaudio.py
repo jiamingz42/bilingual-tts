@@ -1,24 +1,44 @@
-import argparse
-import json
+"""
+This module provides a function to generate bilingual TTS from audio and
+subtitle files. The function takes an input audio file, a subtitle file, and
+other optional parameters such as a transition sound file, a translation
+strategy, and a translation language. The function extracts audio segments from
+the input audio file based on the start and end times in the subtitle file, and
+generates a TTS translation of the subtitle text using the specified translation
+strategy and language. The TTS translations are concatenated with the original
+audio segments and a transition sound to create a final bilingual TTS audio
+file.
+
+Functions:
+- create_audio_from_audio: Generates bilingual TTS from audio and subtitle files.
+"""
 import tempfile
+import os
+import hashlib
+
+from typing import Callable, Optional
+
+import pydub  # type: ignore
+import deepl  # type: ignore
+
 from gtts import gTTS  # type: ignore
 from pydub import AudioSegment  # type: ignore
 from tqdm import tqdm
-import pydub  # type: ignore
-import os
-import pysrt  # type: ignore
-import pyass  # type: ignore
-import deepl  # type: ignore
-import hashlib
 
-from typing import *
-
+from dualang.subtitle_loader import load_subtitle_file
 
 def fake_translate_func(text: str, target_lang: str) -> str:
-    return "Hello world"
+    """
+    A fake translation function that always returns "Hello world".
 
+    Args:
+        text (str): The text to be translated.
+        target_lang (str): The target language for the translation.
 
-from typing import Callable
+    Returns:
+        str: The translated text.
+    """
+    return f"[{target_lang}] Hello world"
 
 
 def create_audio_from_audio(
@@ -134,7 +154,6 @@ def fromaudio_main(args):
         print(f"Error: Unsupported translation strategy {args.tr_strategy}.")
         exit(1)
 
-    from dualang.subtitle_loader import load_subtitle_file
 
     # If subtitle file is not provided, derive it from the input audio file
     if args.subtitle_file is None:
@@ -169,6 +188,19 @@ def fromaudio_main(args):
 
 
 def get_output_file_name(input_audio: str, output_file: Optional[str]) -> str:
+    """
+    Returns the output file name for the given input audio file and output file path.
+    If the output file path is not provided, it is generated based on the input audio file path.
+    If the output file path is a directory, the output file is generated in that directory with the same name as the input audio file.
+    If the output file path is the same as the input audio file, the output file is generated with a '_out' suffix.
+    
+    Args:
+    - input_audio (str): Path to the input audio file.
+    - output_file (Optional[str]): Path to the output file. If not provided, it is generated based on the input audio file path.
+    
+    Returns:
+    - output_file (str): Path to the output file.
+    """
     if output_file is None:
         output_file = os.path.join(
             os.path.dirname(input_audio),
