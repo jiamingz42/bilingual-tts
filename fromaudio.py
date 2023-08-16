@@ -14,6 +14,8 @@ import hashlib
 def fake_translate_func(text: str, target_lang: str) -> str:
     return "Hello world"
 
+from typing import Callable
+
 def create_audio_from_audio(
     input_audio: str,
     subtitle_data: list,
@@ -22,7 +24,7 @@ def create_audio_from_audio(
     repeat_count: int,
     tr_lang: str,
     verbose: bool,
-    translate_func: callable,
+    translate_func: Callable[[str, str], str],
     interval: int = 500,
 ) -> None:
 
@@ -100,11 +102,15 @@ def fromaudio_main(args):
         print("Error: The DEEPL_API_KEY environment variable is not set. Please set it to your DeepL API key.")
         exit(1)
 
+    translate_func: Callable[[str, str], str]
     if args.tr_strategy == "deepl":
         translator = deepl.Translator(os.environ['DEEPL_API_KEY'])
         translate_func = translator.translate_text
-    else:
+    elif args.tr_strategy == "fake":
         translate_func = fake_translate_func
+    else:
+        print(f"Error: Unsupported translation strategy {args.tr_strategy}.")
+        exit(1)
 
     from subtitle_loader import load_subtitle_file
 
