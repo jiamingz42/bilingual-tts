@@ -11,6 +11,8 @@ import pyass  # type: ignore
 import deepl  # type: ignore
 import hashlib
 
+from typing import *
+
 def fake_translate_func(text: str, target_lang: str) -> str:
     return "Hello world"
 
