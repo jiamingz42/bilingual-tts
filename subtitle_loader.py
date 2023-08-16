@@ -1,3 +1,6 @@
+import os
+import pyass
+
 from dataclasses import dataclass
 from typing import List
 
@@ -24,7 +27,7 @@ def load_subtitle_file(subtitle_file: str) -> List[Subtitle]:
     else:
         print(f"Error: Unsupported subtitle file format. Only .srt and .ass are supported.")
         exit(1)
-    print("Loaded subtitle file")
+    print(f"Loaded subtitle file: {len(subtitles)} lines")
     if (len(subtitles) == 0):
         print(f"Error: Subtitle file is empty.")
         exit(1)
