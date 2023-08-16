@@ -106,15 +106,13 @@ def fromaudio_main(args):
     else:
         translate_func = fake_translate_func
 
+    from subtitle_loader import load_subtitle_file
+
     # If subtitle file is not provided, derive it from the input audio file
     if args.subtitle_file is None:
         args.subtitle_file = args.input_audio.rsplit('.', 1)[0] + '.srt'
 
-    # Validate if the subtitle file and audio file exist
-    if not os.path.isfile(args.subtitle_file):
-        print(f"Error: Subtitle file {args.subtitle_file} does not exist.")
-        exit(1)
-
+    # Validate if the audio file and transition sound file exist
     if not os.path.isfile(args.input_audio):
         print(f"Error: Audio file {args.input_audio} does not exist.")
         exit(1)
@@ -134,18 +132,7 @@ def fromaudio_main(args):
             args.output_file = args.output_file.rsplit('.', 1)[0] + '_out.mp3'
 
     # Load the subtitle file and parse it into a list of sentences
-    if args.subtitle_file.endswith('.srt'):
-        subtitle_data = pysrt.open(args.subtitle_file)
-    elif args.subtitle_file.endswith('.ass'):
-        with open(args.subtitle_file, encoding="utf_8_sig") as f:
-            subtitle_data = pyass.load(f).events
-    else:
-        print(f"Error: Unsupported subtitle file format. Only .srt and .ass are supported.")
-        exit(1)
-    print("Loaded subtitle file")
-    if (len(subtitle_data) == 0):
-        print(f"Error: Subtitle file is empty.")
-        exit(1)
+    subtitle_data = load_subtitle_file(args.subtitle_file)
 
     create_audio_from_audio(
         args.input_audio,
