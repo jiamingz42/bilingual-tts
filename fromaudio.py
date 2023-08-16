@@ -47,8 +47,8 @@ def create_audio_from_audio(
     # Iterate over the sentences in the subtitle file
     for subtitle in tqdm(subtitle_data, desc='Processing sentences'):
         # Extract the start and end times from the subtitle
-        start_time = subtitle.start.ordinal / 1000  # Convert from milliseconds to seconds
-        end_time = subtitle.end.ordinal / 1000  # Convert from milliseconds to seconds
+        start_time = subtitle.start.total_seconds()
+        end_time = subtitle.end.total_seconds()
 
         # Extract the corresponding audio segment from the input audio
         audio_segment = input_audio[start_time * 1000:end_time * 1000]  # Convert from seconds to milliseconds
