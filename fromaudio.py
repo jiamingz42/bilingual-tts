@@ -26,6 +26,7 @@ def create_audio_from_audio(
     verbose: bool,
     translate_func: Callable[[str, str], str],
     interval: int = 500,
+    limit: Optional[int] = None,
 ) -> None:
 
     sentences = [subtitle.text for subtitle in subtitle_data]
@@ -45,7 +46,7 @@ def create_audio_from_audio(
     audio_segments = []
 
     # Iterate over the sentences in the subtitle file
-    for subtitle in tqdm(subtitle_data[:limit], desc='Processing sentences'):
+    for subtitle in tqdm(subtitle_data[:limit] if limit is not None else subtitle_data, desc='Processing sentences'):
         if not subtitle.text:
             continue
 
