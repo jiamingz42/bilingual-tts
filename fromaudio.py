@@ -16,7 +16,7 @@ def fake_translate_func(text: str, target_lang: str) -> str:
 
 def create_audio_from_audio(
     input_audio,
-    subtitle_file,
+    subtitle_data,
     output_file,
     transition_sound,
     repeat_count,
@@ -25,19 +25,6 @@ def create_audio_from_audio(
     translate_func,
     interval=500,
 ):
-    # Load the subtitle file and parse it into a list of sentences
-    if subtitle_file.endswith('.srt'):
-        subtitle_data = pysrt.open(subtitle_file)
-    elif subtitle_file.endswith('.ass'):
-        with open(subtitle_file, encoding="utf_8_sig") as f:
-            subtitle_data = pyass.load(f).events
-    else:
-        print(f"Error: Unsupported subtitle file format. Only .srt and .ass are supported.")
-        exit(1)
-    print("Loaded subtitle file")
-    if (len(subtitle_data) == 0):
-        print(f"Error: Subtitle file is empty.")
-        exit(1)
 
     sentences = [subtitle.text for subtitle in subtitle_data]
 
@@ -146,9 +133,23 @@ def fromaudio_main(args):
         if args.output_file == args.input_audio:
             args.output_file = args.output_file.rsplit('.', 1)[0] + '_out.mp3'
 
+    # Load the subtitle file and parse it into a list of sentences
+    if args.subtitle_file.endswith('.srt'):
+        subtitle_data = pysrt.open(args.subtitle_file)
+    elif args.subtitle_file.endswith('.ass'):
+        with open(args.subtitle_file, encoding="utf_8_sig") as f:
+            subtitle_data = pyass.load(f).events
+    else:
+        print(f"Error: Unsupported subtitle file format. Only .srt and .ass are supported.")
+        exit(1)
+    print("Loaded subtitle file")
+    if (len(subtitle_data) == 0):
+        print(f"Error: Subtitle file is empty.")
+        exit(1)
+
     create_audio_from_audio(
         args.input_audio,
-        args.subtitle_file,
+        subtitle_data,
         args.output_file,
         args.transition_sound,
         args.repeat_count,
