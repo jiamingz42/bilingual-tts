@@ -24,13 +24,18 @@ def create_audio_from_audio(
     translate_func,
     interval=500,
 ):
+    # Load the subtitle file and parse it into a list of sentences
+    subtitle_data = pysrt.open(subtitle_file)
+    print("Loaded subtitle file")
+    if (len(subtitle_data) == 0):
+        print(f"Error: Subtitle file is empty.")
+        exit(1)
+
+    sentences = [subtitle.text for subtitle in subtitle_data]
+
     # Load the input audio file using AudioSegment.from_file
     input_audio = AudioSegment.from_file(input_audio)
     print("Loaded input audio")
-
-    # Load the subtitle file and parse it into a list of sentences
-    subtitle_data = pysrt.open(subtitle_file)
-    sentences = [subtitle.text for subtitle in subtitle_data]
 
     if verbose:
         for i, sentence in enumerate(sentences):
