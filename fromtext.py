@@ -1,5 +1,5 @@
-from gtts import gTTS
-from pydub import AudioSegment
+from gtts import gTTS  # type: ignore
+from pydub import AudioSegment  # type: ignore
 from tqdm import tqdm
 
 import json

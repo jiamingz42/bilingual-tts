@@ -1,14 +1,14 @@
 import argparse
 import json
 import tempfile
-from gtts import gTTS
-from pydub import AudioSegment
+from gtts import gTTS  # type: ignore
+from pydub import AudioSegment  # type: ignore
 from tqdm import tqdm
-import pydub
+import pydub  # type: ignore
 import os
-import pysrt
-import pyass
-import deepl
+import pysrt  # type: ignore
+import pyass  # type: ignore
+import deepl  # type: ignore
 import hashlib
 
 def fake_translate_func(text: str, target_lang: str) -> str:
