@@ -53,15 +53,13 @@ def create_audio_from_audio(
     interval: int = 500,
     limit: Optional[int] = None,
 ) -> None:
-    sentences = [subtitle.text for subtitle in subtitle_data]
+    if verbose:
+        for i, subtitle in enumerate(subtitle_data):
+            print(f"{i:03d} {subtitle.text}")
 
     # Load the input audio file using AudioSegment.from_file
     input_audio = AudioSegment.from_file(input_audio)
     print("Loaded input audio")
-
-    if verbose:
-        for i, sentence in enumerate(sentences):
-            print(f"{i:03d} {sentence}")
 
     # Create a temporary directory to store the audio segments
     temp_dir = tempfile.mkdtemp()
@@ -70,10 +68,7 @@ def create_audio_from_audio(
     audio_segments = []
 
     # Iterate over the sentences in the subtitle file
-    for subtitle in tqdm(
-        subtitle_data[:limit] if limit is not None else subtitle_data,
-        desc="Processing sentences",
-    ):
+    for subtitle in tqdm(subtitle_data, desc="Processing sentences"):
         if not subtitle.text:
             continue
 
@@ -173,6 +168,9 @@ def fromaudio_main(args):
 
     # Load the subtitle file and parse it into a list of sentences
     subtitle_data = load_subtitle_file(args.subtitle_file)
+    subtitle_data = subtitle_data[args.offset:]
+    if args.limit is not None:
+        subtitle_data = subtitle_data[: args.limit]
 
     create_audio_from_audio(
         args.input_audio,
