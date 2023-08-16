@@ -1,6 +1,6 @@
 import argparse
-from fromtext import fromtext_main
-from fromaudio import fromaudio_main
+from dualang.fromtext import fromtext_main
+from dualang.fromaudio import fromaudio_main
 
 def main():
     # Create a parser object

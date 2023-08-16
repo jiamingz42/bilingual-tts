@@ -120,7 +120,7 @@ def fromaudio_main(args):
         print(f"Error: Unsupported translation strategy {args.tr_strategy}.")
         exit(1)
 
-    from subtitle_loader import load_subtitle_file
+    from dualang.subtitle_loader import load_subtitle_file
 
     # If subtitle file is not provided, derive it from the input audio file
     if args.subtitle_file is None:
