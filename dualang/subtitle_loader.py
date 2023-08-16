@@ -1,8 +1,10 @@
 import os
 import pyass
+import pysrt
 
 from dataclasses import dataclass
 from typing import List
+
 
 
 @dataclass
