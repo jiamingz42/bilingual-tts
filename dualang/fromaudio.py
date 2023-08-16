@@ -13,10 +13,13 @@ import hashlib
 
 from typing import *
 
+
 def fake_translate_func(text: str, target_lang: str) -> str:
     return "Hello world"
 
+
 from typing import Callable
+
 
 def create_audio_from_audio(
     input_audio: str,
@@ -30,7 +33,6 @@ def create_audio_from_audio(
     interval: int = 500,
     limit: Optional[int] = None,
 ) -> None:
-
     sentences = [subtitle.text for subtitle in subtitle_data]
 
     # Load the input audio file using AudioSegment.from_file
@@ -48,7 +50,10 @@ def create_audio_from_audio(
     audio_segments = []
 
     # Iterate over the sentences in the subtitle file
-    for subtitle in tqdm(subtitle_data[:limit] if limit is not None else subtitle_data, desc='Processing sentences'):
+    for subtitle in tqdm(
+        subtitle_data[:limit] if limit is not None else subtitle_data,
+        desc="Processing sentences",
+    ):
         if not subtitle.text:
             continue
 
@@ -57,10 +62,14 @@ def create_audio_from_audio(
         end_time = subtitle.end.total_seconds()
 
         # Extract the corresponding audio segment from the input audio
-        audio_segment = input_audio[start_time * 1000:end_time * 1000]  # Convert from seconds to milliseconds
+        audio_segment = input_audio[
+            start_time * 1000 : end_time * 1000
+        ]  # Convert from seconds to milliseconds
 
         # Repeat the audio segment three times with a silent interval in between
-        repeated_audio_segment = audio_segment + AudioSegment.silent(duration=1000)  # 1 second silent interval
+        repeated_audio_segment = audio_segment + AudioSegment.silent(
+            duration=1000
+        )  # 1 second silent interval
         repeated_audio_segment = repeated_audio_segment * 3
 
         # Translate the subtitle text using the provided translate function
@@ -74,14 +83,16 @@ def create_audio_from_audio(
         subtitle_hash = hashlib.md5(subtitle.text.encode()).hexdigest()
 
         # Save the translated speech to a temporary file using the hash as the filename
-        tts_file = os.path.join(temp_dir, f'{subtitle_hash}.mp3')
+        tts_file = os.path.join(temp_dir, f"{subtitle_hash}.mp3")
         tts.save(tts_file)
 
         # Load the translated speech as an audio segment
         tts_audio_segment = AudioSegment.from_file(tts_file)
 
         # Append the TTS translation to the repeated audio segments with a silent interval
-        repeated_audio_segment += AudioSegment.silent(duration=interval) + tts_audio_segment
+        repeated_audio_segment += (
+            AudioSegment.silent(duration=interval) + tts_audio_segment
+        )
 
         # Append the original extracted audio segment one more time with a silent interval
         repeated_audio_segment += AudioSegment.silent(duration=interval) + audio_segment
@@ -94,25 +105,28 @@ def create_audio_from_audio(
 
     # Concatenate the audio segments into a single audio file
     final_audio = pydub.AudioSegment.empty()
-    for audio_segment in tqdm(audio_segments, desc='Processing audio segments'):
+    for audio_segment in tqdm(audio_segments, desc="Processing audio segments"):
         # Append the transition sound to each audio segment
         if audio_segment.channels > 1:
             audio_segment = audio_segment.set_channels(1)
         final_audio += audio_segment + transition_sound
 
     # Save the final audio to the output file
-    final_audio.export(output_file, format='mp3')
+    final_audio.export(output_file, format="mp3")
+
 
 def fromaudio_main(args):
     print("Generating bilingual TTS from audio ...")
 
-    if 'DEEPL_API_KEY' not in os.environ:
-        print("Error: The DEEPL_API_KEY environment variable is not set. Please set it to your DeepL API key.")
+    if "DEEPL_API_KEY" not in os.environ:
+        print(
+            "Error: The DEEPL_API_KEY environment variable is not set. Please set it to your DeepL API key."
+        )
         exit(1)
 
     translate_func: Callable[[str, str], str]
     if args.tr_strategy == "deepl":
-        translator = deepl.Translator(os.environ['DEEPL_API_KEY'])
+        translator = deepl.Translator(os.environ["DEEPL_API_KEY"])
         translate_func = translator.translate_text
     elif args.tr_strategy == "fake":
         translate_func = fake_translate_func
@@ -124,7 +138,7 @@ def fromaudio_main(args):
 
     # If subtitle file is not provided, derive it from the input audio file
     if args.subtitle_file is None:
-        args.subtitle_file = args.input_audio.rsplit('.', 1)[0] + '.srt'
+        args.subtitle_file = args.input_audio.rsplit(".", 1)[0] + ".srt"
 
     # Validate if the audio file and transition sound file exist
     if not os.path.isfile(args.input_audio):
@@ -153,14 +167,19 @@ def fromaudio_main(args):
         limit=args.limit,
     )
 
+
 def get_output_file_name(input_audio: str, output_file: Optional[str]) -> str:
     if output_file is None:
-        output_file = os.path.join(os.path.dirname(input_audio), os.path.basename(input_audio).rsplit('.', 1)[0] + '.mp3')
+        output_file = os.path.join(
+            os.path.dirname(input_audio),
+            os.path.basename(input_audio).rsplit(".", 1)[0] + ".mp3",
+        )
         if output_file == input_audio:
-            output_file = output_file.rsplit('.', 1)[0] + '_out.mp3'
+            output_file = output_file.rsplit(".", 1)[0] + "_out.mp3"
     elif os.path.isdir(output_file):
-        output_file = os.path.join(output_file, os.path.basename(input_audio).rsplit('.', 1)[0] + '.mp3')
+        output_file = os.path.join(
+            output_file, os.path.basename(input_audio).rsplit(".", 1)[0] + ".mp3"
+        )
         if output_file == input_audio:
-            output_file = output_file.rsplit('.', 1)[0] + '_out.mp3'
+            output_file = output_file.rsplit(".", 1)[0] + "_out.mp3"
     return output_file
-

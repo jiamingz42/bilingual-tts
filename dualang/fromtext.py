@@ -5,19 +5,20 @@ from tqdm import tqdm
 import json
 import tempfile
 
+
 def create_audio(
-        sentences,
-        output_file,
-        transition_sound,
-        target_lang,
-        target_key,
-        tr_lang,
-        tr_key,
-        interval,
-        target_repeat,
-        translation_repeat,
-        verbose
-    ):
+    sentences,
+    output_file,
+    transition_sound,
+    target_lang,
+    target_key,
+    tr_lang,
+    tr_key,
+    interval,
+    target_repeat,
+    translation_repeat,
+    verbose,
+):
     final_audio = AudioSegment.silent(duration=0)
 
     # Load the transition sound
@@ -47,8 +48,13 @@ def create_audio(
                 translation_audio = AudioSegment.from_mp3(translation_file.name)
 
             # Repeat and combine the audio with interval between repetitions
-            combined_audio = (target_audio + AudioSegment.silent(duration=interval)) * target_repeat
-            combined_audio += translation_audio * translation_repeat + AudioSegment.silent(duration=interval)
+            combined_audio = (
+                target_audio + AudioSegment.silent(duration=interval)
+            ) * target_repeat
+            combined_audio += (
+                translation_audio * translation_repeat
+                + AudioSegment.silent(duration=interval)
+            )
             combined_audio += target_audio
 
             # Add to the final audio with a "ding" sound
@@ -56,6 +62,7 @@ def create_audio(
 
     # Save the final audio
     final_audio.export(output_file, format="mp3")
+
 
 def fromtext_main(args):
     # Validate the input file
@@ -68,10 +75,10 @@ def fromtext_main(args):
 
     # If output file is not provided, derive it from the input file
     if args.output is None:
-        args.output = args.input.rsplit('.', 1)[0] + '.mp3'
+        args.output = args.input.rsplit(".", 1)[0] + ".mp3"
 
     # Validate the output file
-    if not args.output.endswith('.mp3'):
+    if not args.output.endswith(".mp3"):
         print(f"Error: {args.output} is not a valid MP3 file.")
         exit(1)
 
@@ -90,5 +97,5 @@ def fromtext_main(args):
         args.interval,
         args.target_repeat,
         args.translation_repeat,
-        args.verbose
+        args.verbose,
     )
