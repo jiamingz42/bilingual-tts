@@ -11,7 +11,7 @@ import pyass
 import deepl
 import hashlib
 
-def fake_translate_func(text, target_lang):
+def fake_translate_func(text: str, target_lang: str) -> str:
     return "Hello world"
 
 def create_audio_from_audio(

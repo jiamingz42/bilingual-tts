@@ -2,6 +2,22 @@
 
 This script is used to create an audio file from a set of sentences. The sentences are provided in a JSON file. The script uses Google Text-to-Speech to convert the sentences into speech. The speech is then combined with a transition sound to create the final audio file. The script allows the user to specify the target language, the translation language, the interval between repetitions, and the number of times to repeat the target language and the translation.
 
+# Type Checking
+
+This project uses type hinting to help catch certain types of errors. You can use `mypy` to check the types in this project. Install `mypy` using pip:
+
+```bash
+pip install mypy
+```
+
+Then run `mypy` on the project:
+
+```bash
+mypy .
+```
+
+This will check all files in the current directory and any subdirectories. If there are any type inconsistencies, `mypy` will print them to the console.
+
 # Usage
 
 This script now supports two subcommands: `fromtext` and `fromaudio`.
