@@ -25,7 +25,13 @@ def create_audio_from_audio(
     interval=500,
 ):
     # Load the subtitle file and parse it into a list of sentences
-    subtitle_data = pysrt.open(subtitle_file)
+    if subtitle_file.endswith('.srt'):
+        subtitle_data = pysrt.open(subtitle_file)
+    elif subtitle_file.endswith('.ass'):
+        subtitle_data = pyass.ASS(subtitle_file).events
+    else:
+        print(f"Error: Unsupported subtitle file format. Only .srt and .ass are supported.")
+        exit(1)
     print("Loaded subtitle file")
     if (len(subtitle_data) == 0):
         print(f"Error: Subtitle file is empty.")
