@@ -73,8 +73,9 @@ def create_audio_from_audio(
             continue
 
         # Extract the start and end times from the subtitle
-        start_time = subtitle.start.total_seconds()
-        end_time = subtitle.end.total_seconds()
+        # Assuming subtitle.start and subtitle.end are in milliseconds
+        start_time = subtitle.start / 1000  # Convert from milliseconds to seconds
+        end_time = subtitle.end / 1000  # Convert from milliseconds to seconds
 
         # Extract the corresponding audio segment from the input audio
         audio_segment = input_audio[
