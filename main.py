@@ -21,6 +21,7 @@ def main():
     parser_fromaudio.add_argument('--tr-lang', default='EN-US', help='Translation language. Default is "en".')
     parser_fromaudio.add_argument('-v', '--verbose', action='store_true', help='Enable verbose output.')
     parser_fromaudio.add_argument('--tr-strategy', default='deepl', help='Translation strategy to use. Options are "deepl" and "fake". Default is "deepl".')
+    parser_fromaudio.add_argument('--limit', type=int, help='Number of subtitles to process. If not provided, all subtitles will be processed.')
     parser_fromaudio.set_defaults(func=fromaudio_main)
 
     # Parse the arguments
