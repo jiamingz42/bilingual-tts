@@ -7,6 +7,7 @@ from tqdm import tqdm
 import pydub
 import os
 import pysrt
+import pyass
 import deepl
 import hashlib
 
