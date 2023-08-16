@@ -18,6 +18,42 @@ mypy .
 
 This will check all files in the current directory and any subdirectories. If there are any type inconsistencies, `mypy` will print them to the console.
 
+# Development
+
+## Linter and Formatter
+
+This project uses `flake8` for linting and `black` for formatting.
+
+To install these tools, run:
+
+```bash
+pip install -r requirements-dev.txt
+```
+
+To check your code for PEP8 compliance and other potential issues, run:
+
+```bash
+flake8 .
+```
+
+To automatically format your code to comply with PEP8, run:
+
+```bash
+black .
+```
+
+## Dependencies
+
+This project has two sets of dependencies: production and development.
+
+Production dependencies are listed in `requirements.txt`. These are necessary for running the application.
+
+Development dependencies are listed in `requirements-dev.txt`. These are not necessary for running the application, but are useful for development. To install these dependencies, run:
+
+```bash
+pip install -r requirements-dev.txt
+```
+
 # Usage
 
 This script now supports two subcommands: `fromtext` and `fromaudio`.
