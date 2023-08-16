@@ -29,7 +29,8 @@ def create_audio_from_audio(
     if subtitle_file.endswith('.srt'):
         subtitle_data = pysrt.open(subtitle_file)
     elif subtitle_file.endswith('.ass'):
-        subtitle_data = pyass.ASS(subtitle_file).events
+        with open(subtitle_file, encoding="utf_8_sig") as f:
+            subtitle_data = pyass.load(f).events
     else:
         print(f"Error: Unsupported subtitle file format. Only .srt and .ass are supported.")
         exit(1)
