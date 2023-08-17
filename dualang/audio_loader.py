@@ -65,7 +65,7 @@ def get_selected_track(audio_tracks, input_audio):
             temp_audio = tempfile.mktemp(suffix=f".{codec_name}")
             out, err = (
                 ffmpeg.input(input_audio)
-                .output(temp_audio, map=f"0:{i-1}", c="copy")
+                .output(temp_audio, map=f"0:{i-1}", c="aac")
                 .run(capture_stdout=True, capture_stderr=True)
             )
             print(out, err)
