@@ -66,7 +66,7 @@ def create_audio_from_audio(
             # If there is more than one audio track, ask the user to select one
             print(f'The MKV file has {len(audio_tracks)} audio tracks. Please select one:')
             for i, track in enumerate(audio_tracks, start=1):
-                print(f'{i}: {track["tags"]["language"] if "tags" in track and "language" in track["tags"] else "unknown"}')
+                print(f'{i}: {track["tags"]["language"] if "tags" in track and "language" in track["tags"] else "unknown"} (codec: {track["codec_name"]})')
             selected_track = int(input('Your selection: ')) - 1
         else:
             selected_track = 0
