@@ -4,3 +4,4 @@ tqdm
 pysrt
 deepl
 pyass
+ffmpeg-python
