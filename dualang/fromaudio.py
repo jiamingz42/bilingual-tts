@@ -51,7 +51,6 @@ def create_audio_from_audio(
     verbose: bool,
     translate_func: Callable[[str, str], str],
     interval: int = 500,
-    limit: Optional[int] = None,
 ) -> None:
     if verbose:
         for i, subtitle in enumerate(subtitle_data):
@@ -180,7 +179,6 @@ def fromaudio_main(args):
         args.tr_lang,
         args.verbose,
         translate_func=translate_func,
-        limit=args.limit,
     )
 
 
