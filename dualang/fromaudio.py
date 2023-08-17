@@ -70,10 +70,11 @@ def create_audio_from_audio(
             selected_track = int(input('Your selection: ')) - 1
         else:
             selected_track = 0
-        # Use ffmpeg to extract the selected audio track to a temporary WAV file
-        temp_audio = tempfile.mktemp(suffix='.wav')
-        ffmpeg.input(input_audio).output(temp_audio, map=f'0:{selected_track}', acodec='pcm_s16le', ar=48000).run()
-        # Load the temporary WAV file using AudioSegment.from_file
+        # Use ffmpeg to copy the selected audio track to a temporary file without re-encoding it
+        codec_name = audio_tracks[selected_track]['codec_name']
+        temp_audio = tempfile.mktemp(suffix=f'.{codec_name}')
+        ffmpeg.input(input_audio).output(temp_audio, map=f'0:{selected_track}', c='copy').run()
+        # Load the temporary file using AudioSegment.from_file
         input_audio = AudioSegment.from_file(temp_audio)
         print("Loaded input audio from MKV file")
     else:
