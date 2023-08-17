@@ -151,7 +151,25 @@ def fromaudio_main(args):
 
     # If subtitle file is not provided, derive it from the input audio file
     if args.subtitle_file is None:
-        args.subtitle_file = args.input_audio.rsplit(".", 1)[0] + ".srt"
+        base_name = args.input_audio.rsplit(".", 1)[0]
+        for ext in [".srt", ".ass", ".vtt"]:
+            subtitle_file = base_name + ext
+            if os.path.isfile(subtitle_file):
+                args.subtitle_file = subtitle_file
+                break
+        else:
+            for prefix in ["", ".ja", ".en", ".fr", ".de", ".es", ".it", ".nl", ".pl", ".pt", ".ru", ".zh"]:
+                for ext in [".srt", ".ass", ".vtt"]:
+                    subtitle_file = base_name + prefix + ext
+                    if os.path.isfile(subtitle_file):
+                        args.subtitle_file = subtitle_file
+                        break
+                else:
+                    continue
+                break
+            else:
+                print(f"Error: No subtitle file found for audio file {args.input_audio}.")
+                exit(1)
 
     # Validate if the audio file and transition sound file exist
     if not os.path.isfile(args.input_audio):
