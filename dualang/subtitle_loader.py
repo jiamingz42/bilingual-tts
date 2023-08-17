@@ -9,8 +9,8 @@ from typing import List
 
 @dataclass
 class Subtitle:
-    start: int
-    end: int
+    start: int # milleseconds
+    end: int # milliseconds
     text: str
 
 
@@ -29,7 +29,13 @@ def load_subtitle_file(subtitle_file: str) -> List[Subtitle]:
     elif subtitle_file.endswith(".ass"):
         with open(subtitle_file, encoding="utf_8_sig") as f:
             subtitle_data = pyass.load(f).events
-        subtitles = [Subtitle(e.start, e.end, e.text) for e in subtitle_data]
+        subtitles = [
+            Subtitle(
+              e.start.total_milliseconds(),
+              e.end.total_milliseconds(),
+              e.text
+            ) for e in subtitle_data
+        ]
     else:
         print(
             f"Error: Unsupported subtitle file format. Only .srt and .ass are supported."

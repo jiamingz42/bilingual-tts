@@ -74,13 +74,11 @@ def create_audio_from_audio(
 
         # Extract the start and end times from the subtitle
         # Assuming subtitle.start and subtitle.end are in milliseconds
-        start_time = subtitle.start / 1000  # Convert from milliseconds to seconds
-        end_time = subtitle.end / 1000  # Convert from milliseconds to seconds
+        start_time = subtitle.start
+        end_time = subtitle.end
 
         # Extract the corresponding audio segment from the input audio
-        audio_segment = input_audio[
-            start_time * 1000 : end_time * 1000
-        ]  # Convert from seconds to milliseconds
+        audio_segment = input_audio[start_time: end_time]  
 
         # Repeat the audio segment three times with a silent interval in between
         repeated_audio_segment = audio_segment + AudioSegment.silent(
@@ -124,9 +122,7 @@ def create_audio_from_audio(
     for audio_segment in tqdm(audio_segments, desc="Processing audio segments"):
         # Append the transition sound to each audio segment
         if audio_segment.channels > 1:
-            import ipdb
-            ipdb.set_trace()
-            audio_segment = audio_segment.set_channels(3)
+            audio_segment = audio_segment.set_channels(1)
         final_audio += audio_segment + transition_sound
 
     # Save the final audio to the output file
