@@ -5,3 +5,4 @@ pysrt
 deepl
 pyass
 ffmpeg-python
+simpleaudio

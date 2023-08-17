@@ -16,6 +16,7 @@ import tempfile
 import os
 import hashlib
 import ffmpeg
+from pydub import playback
 
 from typing import Callable, Optional
 
@@ -209,6 +210,8 @@ def get_output_file_name(input_audio: str, output_file: Optional[str]) -> str:
         if output_file == input_audio:
             output_file = output_file.rsplit(".", 1)[0] + "_out.mp3"
     return output_file
+
+
 def convert_mkv_to_audio_segment(input_audio: str, verbose: bool = False) -> AudioSegment:
     """
     Converts an MKV file into an AudioSegment.
@@ -226,10 +229,18 @@ def convert_mkv_to_audio_segment(input_audio: str, verbose: bool = False) -> Aud
         audio_tracks = [stream for stream in probe['streams'] if stream['codec_type'] == 'audio']
         if len(audio_tracks) > 1:
             # If there is more than one audio track, ask the user to select one
-            print(f'The MKV file has {len(audio_tracks)} audio tracks. Please select one:')
+            print(f'The MKV file has {len(audio_tracks)} audio tracks.')
             for i, track in enumerate(audio_tracks, start=1):
                 print(f'{i}: {track["tags"]["language"] if "tags" in track and "language" in track["tags"] else "unknown"} (codec: {track["codec_name"]})')
-            selected_track = int(input('Your selection: ')) - 1
+            listen_sample = input('Do you want to listen to a sample of the audio tracks? (yes/no): ')
+            if listen_sample.lower() == 'yes':
+                for i, track in enumerate(audio_tracks, start=1):
+                    temp_audio = tempfile.mktemp(suffix=f'.{codec_name}')
+                    out, err = ffmpeg.input(input_audio).output(temp_audio, map=f'0:{i-1}', c='copy').run(capture_stdout=True, capture_stderr=True)
+                    sample_audio = AudioSegment.from_file(temp_audio)[:30000]  # Get the first 30 seconds
+                    print(f'Playing sample for track {i}:')
+                    playback.play(sample_audio)
+            selected_track = int(input('Please select an audio track: ')) - 1
         else:
             selected_track = 0
         # Use ffmpeg to copy the selected audio track to a temporary file without re-encoding it
