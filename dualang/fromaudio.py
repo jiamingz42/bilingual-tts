@@ -57,7 +57,7 @@ def create_audio_from_audio(
         for i, subtitle in enumerate(subtitle_data):
             print(f"{i:03d} {subtitle.text}")
 
-    input_audio = convert_mkv_to_audio_segment(input_audio)
+    input_audio = convert_mkv_to_audio_segment(input_audio, verbose)
 
     # Create a temporary directory to store the audio segments
     temp_dir = tempfile.mkdtemp()
@@ -209,7 +209,7 @@ def get_output_file_name(input_audio: str, output_file: Optional[str]) -> str:
         if output_file == input_audio:
             output_file = output_file.rsplit(".", 1)[0] + "_out.mp3"
     return output_file
-def convert_mkv_to_audio_segment(input_audio: str) -> AudioSegment:
+def convert_mkv_to_audio_segment(input_audio: str, verbose: bool = False) -> AudioSegment:
     """
     Converts an MKV file into an AudioSegment.
 
@@ -235,7 +235,10 @@ def convert_mkv_to_audio_segment(input_audio: str) -> AudioSegment:
         # Use ffmpeg to copy the selected audio track to a temporary file without re-encoding it
         codec_name = audio_tracks[selected_track]['codec_name']
         temp_audio = tempfile.mktemp(suffix=f'.{codec_name}')
-        ffmpeg.input(input_audio).output(temp_audio, map=f'0:{selected_track}', c='copy').run()
+        out, err = ffmpeg.input(input_audio).output(temp_audio, map=f'0:{selected_track}', c='copy').run(capture_stdout=True, capture_stderr=True)
+        if verbose:
+            print(out)
+            print(err, file=sys.stderr)
         # Load the temporary file using AudioSegment.from_file
         input_audio = AudioSegment.from_file(temp_audio)
         print("Loaded input audio from MKV file")
