@@ -23,12 +23,6 @@ def load_audio_segment(input_audio: str, verbose: bool = False) -> AudioSegment:
             stream for stream in probe["streams"] if stream["codec_type"] == "audio"
         ]
         if len(audio_tracks) > 1:
-            # If there is more than one audio track, ask the user to select one
-            print(f"The MKV file has {len(audio_tracks)} audio tracks.")
-            for i, track in enumerate(audio_tracks, start=1):
-                print(
-                    f'{i}: {track["tags"]["language"] if "tags" in track and "language" in track["tags"] else "unknown"} (codec: {track["codec_name"]})'
-                )
             selected_track = get_selected_track(audio_tracks, input_audio)
         else:
             selected_track = 0
@@ -52,19 +46,29 @@ def load_audio_segment(input_audio: str, verbose: bool = False) -> AudioSegment:
         print("Loaded input audio")
 
     return input_audio
+
+
 def get_selected_track(audio_tracks, input_audio):
+    # If there is more than one audio track, ask the user to select one
+    print(f"The MKV file has {len(audio_tracks)} audio tracks.")
+    for i, track in enumerate(audio_tracks, start=1):
+        print(
+            f'{i}: {track["tags"]["language"] if "tags" in track and "language" in track["tags"] else "unknown"} (codec: {track["codec_name"]})'
+        )
+
     listen_sample = input(
         "Do you want to listen to a sample of the audio tracks? (yes/no): "
     )
-    codec_name = audio_tracks[selected_track]["codec_name"]
     if listen_sample.lower() == "yes":
         for i, track in enumerate(audio_tracks, start=1):
+            codec_name = track["codec_name"]
             temp_audio = tempfile.mktemp(suffix=f".{codec_name}")
             out, err = (
                 ffmpeg.input(input_audio)
                 .output(temp_audio, map=f"0:{i-1}", c="copy")
                 .run(capture_stdout=True, capture_stderr=True)
             )
+            print(out, err)
             sample_audio = AudioSegment.from_file(temp_audio)[
                 :30000
             ]  # Get the first 30 seconds
