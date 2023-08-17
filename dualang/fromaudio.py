@@ -233,6 +233,7 @@ def convert_mkv_to_audio_segment(input_audio: str, verbose: bool = False) -> Aud
             for i, track in enumerate(audio_tracks, start=1):
                 print(f'{i}: {track["tags"]["language"] if "tags" in track and "language" in track["tags"] else "unknown"} (codec: {track["codec_name"]})')
             listen_sample = input('Do you want to listen to a sample of the audio tracks? (yes/no): ')
+            codec_name = audio_tracks[selected_track]['codec_name']
             if listen_sample.lower() == 'yes':
                 for i, track in enumerate(audio_tracks, start=1):
                     temp_audio = tempfile.mktemp(suffix=f'.{codec_name}')
