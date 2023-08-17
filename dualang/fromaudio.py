@@ -15,6 +15,7 @@ Functions:
 import tempfile
 import os
 import hashlib
+import ffmpeg
 
 from typing import Callable, Optional
 
@@ -56,9 +57,29 @@ def create_audio_from_audio(
         for i, subtitle in enumerate(subtitle_data):
             print(f"{i:03d} {subtitle.text}")
 
-    # Load the input audio file using AudioSegment.from_file
-    input_audio = AudioSegment.from_file(input_audio)
-    print("Loaded input audio")
+    # Check if the input file is an MKV file
+    if input_audio.endswith('.mkv'):
+        # Use ffmpeg to get the number of audio tracks in the file
+        probe = ffmpeg.probe(input_audio)
+        audio_tracks = [stream for stream in probe['streams'] if stream['codec_type'] == 'audio']
+        if len(audio_tracks) > 1:
+            # If there is more than one audio track, ask the user to select one
+            print(f'The MKV file has {len(audio_tracks)} audio tracks. Please select one:')
+            for i, track in enumerate(audio_tracks, start=1):
+                print(f'{i}: {track["tags"]["language"] if "tags" in track and "language" in track["tags"] else "unknown"}')
+            selected_track = int(input('Your selection: ')) - 1
+        else:
+            selected_track = 0
+        # Use ffmpeg to extract the selected audio track to a temporary WAV file
+        temp_audio = tempfile.mktemp(suffix='.wav')
+        ffmpeg.input(input_audio).output(temp_audio, map=f'0:{selected_track}', acodec='pcm_s16le', ar=48000).run()
+        # Load the temporary WAV file using AudioSegment.from_file
+        input_audio = AudioSegment.from_file(temp_audio)
+        print("Loaded input audio from MKV file")
+    else:
+        # Load the input audio file using AudioSegment.from_file
+        input_audio = AudioSegment.from_file(input_audio)
+        print("Loaded input audio")
 
     # Create a temporary directory to store the audio segments
     temp_dir = tempfile.mkdtemp()
