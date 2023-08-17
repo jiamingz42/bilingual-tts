@@ -236,9 +236,9 @@ def convert_mkv_to_audio_segment(input_audio: str, verbose: bool = False) -> Aud
         codec_name = audio_tracks[selected_track]['codec_name']
         temp_audio = tempfile.mktemp(suffix=f'.{codec_name}')
         out, err = ffmpeg.input(input_audio).output(temp_audio, map=f'0:{selected_track}', c='copy').run(capture_stdout=True, capture_stderr=True)
+        print(err, file=sys.stderr)
         if verbose:
             print(out)
-            print(err, file=sys.stderr)
         # Load the temporary file using AudioSegment.from_file
         input_audio = AudioSegment.from_file(temp_audio)
         print("Loaded input audio from MKV file")
