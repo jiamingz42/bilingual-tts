@@ -30,6 +30,7 @@ from tqdm import tqdm
 from dualang.subtitle_loader import load_subtitle_file
 from dualang.audio_loader import load_audio_segment
 
+
 def fake_translate_func(text: str, target_lang: str) -> str:
     """
     A fake translation function that always returns "Hello world".
@@ -78,7 +79,7 @@ def create_audio_from_audio(
         end_time = subtitle.end
 
         # Extract the corresponding audio segment from the input audio
-        audio_segment = input_audio[start_time: end_time]  
+        audio_segment = input_audio[start_time:end_time]
 
         # Repeat the audio segment three times with a silent interval in between
         repeated_audio_segment = audio_segment + AudioSegment.silent(
@@ -148,7 +149,6 @@ def fromaudio_main(args):
         print(f"Error: Unsupported translation strategy {args.tr_strategy}.")
         exit(1)
 
-
     # If subtitle file is not provided, derive it from the input audio file
     if args.subtitle_file is None:
         args.subtitle_file = args.input_audio.rsplit(".", 1)[0] + ".srt"
@@ -167,7 +167,7 @@ def fromaudio_main(args):
 
     # Load the subtitle file and parse it into a list of sentences
     subtitle_data = load_subtitle_file(args.subtitle_file)
-    subtitle_data = subtitle_data[args.offset:]
+    subtitle_data = subtitle_data[args.offset :]
     if args.limit is not None:
         subtitle_data = subtitle_data[: args.limit]
 
@@ -189,11 +189,11 @@ def get_output_file_name(input_audio: str, output_file: Optional[str]) -> str:
     If the output file path is not provided, it is generated based on the input audio file path.
     If the output file path is a directory, the output file is generated in that directory with the same name as the input audio file.
     If the output file path is the same as the input audio file, the output file is generated with a '_out' suffix.
-    
+
     Args:
     - input_audio (str): Path to the input audio file.
     - output_file (Optional[str]): Path to the output file. If not provided, it is generated based on the input audio file path.
-    
+
     Returns:
     - output_file (str): Path to the output file.
     """
@@ -211,4 +211,3 @@ def get_output_file_name(input_audio: str, output_file: Optional[str]) -> str:
         if output_file == input_audio:
             output_file = output_file.rsplit(".", 1)[0] + "_out.mp3"
     return output_file
-
