@@ -130,6 +130,32 @@ def create_audio_from_audio(
     final_audio.export(output_file, format="mp3")
 
 
+def get_subtitle_file_name(input_audio: str, subtitle_file: Optional[str]) -> str:
+    """
+    Returns the subtitle file name for the given input audio file and subtitle file path.
+    If the subtitle file path is not provided, it is derived from the input audio file path.
+
+    Args:
+    - input_audio (str): Path to the input audio file.
+    - subtitle_file (Optional[str]): Path to the subtitle file. If not provided, it is derived from the input audio file path.
+
+    Returns:
+    - subtitle_file (str): Path to the subtitle file.
+    """
+    if subtitle_file is None:
+        base_name = input_audio.rsplit(".", 1)[0]
+        for ext in [".srt", ".ass", ".vtt"]:
+            subtitle_file = base_name + ext
+            if os.path.isfile(subtitle_file):
+                return subtitle_file
+        else:
+            for prefix in ["", ".ja", ".en", ".fr", ".de", ".es", ".it", ".nl", ".pl", ".pt", ".ru", ".zh"]:
+                for ext in [".srt", ".ass", ".vtt"]:
+                    subtitle_file = base_name + prefix + ext
+                    if os.path.isfile(subtitle_file):
+                        return subtitle_file
+    return subtitle_file
+
 def fromaudio_main(args):
     print("Generating bilingual TTS from audio ...")
 
@@ -150,26 +176,10 @@ def fromaudio_main(args):
         exit(1)
 
     # If subtitle file is not provided, derive it from the input audio file
-    if args.subtitle_file is None:
-        base_name = args.input_audio.rsplit(".", 1)[0]
-        for ext in [".srt", ".ass", ".vtt"]:
-            subtitle_file = base_name + ext
-            if os.path.isfile(subtitle_file):
-                args.subtitle_file = subtitle_file
-                break
-        else:
-            for prefix in ["", ".ja", ".en", ".fr", ".de", ".es", ".it", ".nl", ".pl", ".pt", ".ru", ".zh"]:
-                for ext in [".srt", ".ass", ".vtt"]:
-                    subtitle_file = base_name + prefix + ext
-                    if os.path.isfile(subtitle_file):
-                        args.subtitle_file = subtitle_file
-                        break
-                else:
-                    continue
-                break
-            else:
-                print(f"Error: No subtitle file found for audio file {args.input_audio}.")
-                exit(1)
+    subtitle_file = get_subtitle_file_name(args.input_audio, args.subtitle_file)
+    if subtitle_file is None:
+        print(f"Error: No subtitle file found for audio file {args.input_audio}.")
+        exit(1)
 
     # Validate if the audio file and transition sound file exist
     if not os.path.isfile(args.input_audio):
