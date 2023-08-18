@@ -58,6 +58,12 @@ def main():
         default=0,
         help="Start from index-offset subtitles. If not provided, it will start from the beginning.",
     )
+    parser_fromaudio.add_argument(
+        "--silent-interval",
+        type=float,
+        default=0.5,
+        help="Silent interval in seconds. If not provided, it will default to 0.5 seconds.",
+    )
     parser_fromaudio.set_defaults(func=fromaudio_main)
 
     # Parse the arguments
