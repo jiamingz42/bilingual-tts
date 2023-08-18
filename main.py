@@ -60,9 +60,9 @@ def main():
     )
     parser_fromaudio.add_argument(
         "--silent-interval",
-        type=float,
-        default=0.5,
-        help="Silent interval in seconds. If not provided, it will default to 0.5 seconds.",
+        type=int,
+        default=100,
+        help="Silent interval in milliseconds. If not provided, it will default to 100 milliseconds.",
     )
     parser_fromaudio.set_defaults(func=fromaudio_main)
 

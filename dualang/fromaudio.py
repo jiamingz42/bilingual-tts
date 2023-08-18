@@ -183,4 +183,5 @@ def fromaudio_main(args):
         args.tr_lang,
         args.verbose,
         translate_func=translate_func,
+        interval=args.silent_interval
     )
