@@ -1,7 +1,7 @@
 import os
 from typing import Optional
 
-def get_subtitle_file_name(input_audio: str, subtitle_file: Optional[str]) -> str:
+def get_subtitle_file_name(input_audio: str, subtitle_file: Optional[str]) -> Optional[str]:
     """
     Returns the subtitle file name for the given input audio file and subtitle file path.
     If the subtitle file path is not provided, it is derived from the input audio file path.
@@ -13,19 +13,23 @@ def get_subtitle_file_name(input_audio: str, subtitle_file: Optional[str]) -> st
     Returns:
     - subtitle_file (str): Path to the subtitle file.
     """
-    if subtitle_file is None:
-        base_name = input_audio.rsplit(".", 1)[0]
+    if subtitle_file:
+        return subtitle_file
+
+    base_name = input_audio.rsplit(".", 1)[0]
+    for ext in [".srt", ".ass", ".vtt"]:
+        subtitle_file = base_name + ext
+        if os.path.isfile(subtitle_file):
+            return subtitle_file
+
+    for prefix in ["", ".ja", ".en", ".fr", ".de", ".es", ".it", ".nl", ".pl", ".pt", ".ru", ".zh"]:
         for ext in [".srt", ".ass", ".vtt"]:
-            subtitle_file = base_name + ext
+            subtitle_file = base_name + prefix + ext
             if os.path.isfile(subtitle_file):
                 return subtitle_file
-        else:
-            for prefix in ["", ".ja", ".en", ".fr", ".de", ".es", ".it", ".nl", ".pl", ".pt", ".ru", ".zh"]:
-                for ext in [".srt", ".ass", ".vtt"]:
-                    subtitle_file = base_name + prefix + ext
-                    if os.path.isfile(subtitle_file):
-                        return subtitle_file
-    return subtitle_file
+
+    print("Fail to found subtitle file")
+    return None
 
 def get_output_file_name(input_audio: str, output_file: Optional[str]) -> str:
     """

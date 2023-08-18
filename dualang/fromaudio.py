@@ -55,7 +55,7 @@ def create_audio_from_audio(
     tr_lang: str,
     verbose: bool,
     translate_func: Callable[[str, str], str],
-    interval: int = 500,
+    interval: int = 100,
 ) -> None:
     if verbose:
         for i, subtitle in enumerate(subtitle_data):
@@ -169,7 +169,7 @@ def fromaudio_main(args):
     args.output_file = get_output_file_name(args.input_audio, args.output_file)
 
     # Load the subtitle file and parse it into a list of sentences
-    subtitle_data = load_subtitle_file(args.subtitle_file)
+    subtitle_data = load_subtitle_file(subtitle_file)
     subtitle_data = subtitle_data[args.offset :]
     if args.limit is not None:
         subtitle_data = subtitle_data[: args.limit]
