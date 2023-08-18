@@ -31,7 +31,7 @@ class TestSubtitleLoader(unittest.TestCase):
             os.remove(temp.name)
 
     def test_load_vtt_file(self):
-        vtt_content = "00:00:01.000 --> 00:00:02.000\nThis is a test."
+        vtt_content = "WEBVTT\n\n00:00:01.000 --> 00:00:02.000\nThis is a test."
         with tempfile.NamedTemporaryFile(suffix=".vtt", delete=False) as temp:
             temp.write(vtt_content.encode())
             temp.close()
