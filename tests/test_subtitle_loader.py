@@ -19,7 +19,24 @@ class TestSubtitleLoader(unittest.TestCase):
             os.remove(temp.name)
 
     def test_load_ass_file(self):
-        ass_content = "[Events]\nDialogue: 0,0:00:01.00,0:00:02.00,Default,,0,0,0,,This is a test."
+        ass_content = """
+        [Script Info]
+        Title: Default Aegisub file
+        ScriptType: v4.00+
+        WrapStyle: 0
+        ScaledBorderAndShadow: yes
+        YCbCr Matrix: None
+
+        [Aegisub Project Garbage]
+
+        [V4+ Styles]
+        Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+        Style: Default,Arial,20,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,2,2,2,10,10,10,1
+
+        [Events]
+        Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+        Dialogue: 0,0:00:01.00,0:00:02.00,Default,,0,0,0,,This is a test.
+        """
         with tempfile.NamedTemporaryFile(suffix=".ass", delete=False) as temp:
             temp.write(ass_content.encode())
             temp.close()
