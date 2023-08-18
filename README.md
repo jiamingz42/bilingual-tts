@@ -76,6 +76,15 @@ mypy .
 
 This will check all files in the current directory and any subdirectories. If there are any type inconsistencies, `mypy` will print them to the console.
 
+## Unit Testing
+
+This project uses `unittest` for unit testing. To run the unit tests, use the following command:
+
+```bash
+python -m unittest discover tests
+```
+
+This will discover and run all test cases in the `tests` directory.
 
 ## Linter and Formatter
 
