@@ -127,6 +127,9 @@ def create_audio_from_audio(
             audio_segment = audio_segment.set_channels(1)
         final_audio += audio_segment + transition_sound
 
+    # Repeat the original at the end
+    final_audio += input_audio
+
     # Save the final audio to the output file
     final_audio.export(output_file, format="mp3")
 
