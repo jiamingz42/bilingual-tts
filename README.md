@@ -60,21 +60,18 @@ If the `--subtitle-file` or `--output-file` options are not provided, they will 
 
 # Development
 
-## Type Checking
-
-This project uses type hinting to help catch certain types of errors. You can use `mypy` to check the types in this project. Install `mypy` using pip:
-
 ```bash
-pip install mypy
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
 
-Then run `mypy` on the project:
+## Type Checking
+
+This project uses type hinting to help catch certain types of errors. You can use `mypy` to check the types in this project. This will check all files in the current directory and any subdirectories. If there are any type inconsistencies, `mypy` will print them to the console.
 
 ```bash
 mypy .
 ```
-
-This will check all files in the current directory and any subdirectories. If there are any type inconsistencies, `mypy` will print them to the console.
 
 ## Unit Testing
 
@@ -91,10 +88,6 @@ This will discover and run all test cases in the `tests` directory.
 This project uses `flake8` for linting and `black` for formatting.
 
 To install these tools, run:
-
-```bash
-pip install -r requirements-dev.txt
-```
 
 To check your code for PEP8 compliance and other potential issues, run:
 
