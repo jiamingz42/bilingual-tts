@@ -5,7 +5,7 @@ from dualang.subtitle_loader import load_subtitle_file, Subtitle
 class TestSubtitleLoader(unittest.TestCase):
     def setUp(self):
         self.srt_file = 'tests/mock_files/mock.srt'
-        self.ass_file = 'tests/mock_files/mock.ass'
+        self.ass_file = 'tests/mock_files/existing_mock.ass'
         self.vtt_file = 'tests/mock_files/mock.vtt'
 
     def test_load_srt_file(self):
