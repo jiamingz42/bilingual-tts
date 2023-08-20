@@ -11,9 +11,24 @@ def main():
     # Create a parser for the "fromtext" command
     parser_fromtext = subparsers.add_parser("fromtext")
     parser_fromtext.set_defaults(func=fromtext_main)
+    _add_fromtext_arguments(parser_fromtext)
 
     # Create a parser for the "fromaudio" command
     parser_fromaudio = subparsers.add_parser("fromaudio")
+    _add_fromaudio_arguments(parser_fromaudio)
+
+    # Parse the arguments
+    args = parser.parse_args()
+
+    # Call the function specified by the "func" attribute of args
+    args.func(args)
+
+
+def _add_fromtext_arguments(parser_fromtext):
+    pass # TODO
+
+
+def _add_fromaudio_arguments(parser_fromaudio):
     parser_fromaudio.add_argument(
         "-i", "--input-audio", required=True, help="Input audio file to process."
     )
@@ -65,12 +80,6 @@ def main():
         help="Silent interval in milliseconds. If not provided, it will default to 100 milliseconds.",
     )
     parser_fromaudio.set_defaults(func=fromaudio_main)
-
-    # Parse the arguments
-    args = parser.parse_args()
-
-    # Call the function specified by the "func" attribute of args
-    args.func(args)
 
 
 if __name__ == "__main__":
