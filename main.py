@@ -1,6 +1,7 @@
 import argparse
 from dualang.fromtext import fromtext_main
 from dualang.fromaudio import fromaudio_main
+from dualang.command.plaintext import plaintext_main
 
 
 def main():
@@ -17,6 +18,10 @@ def main():
     parser_fromaudio = subparsers.add_parser("fromaudio")
     _add_fromaudio_arguments(parser_fromaudio)
 
+    # Create a parser for the "plaintext" command
+    parser_plaintext = subparsers.add_parser("plaintext")
+    _add_plaintext_arguments(parser_plaintext)
+
     # Parse the arguments
     args = parser.parse_args()
 
@@ -24,12 +29,24 @@ def main():
     args.func(args)
 
 
+def _add_plaintext_arguments(parser_plaintext):
+    parser_plaintext.add_argument(
+        "-i", "--input-file", required=True, help="Input plaintext file."
+    )
+    parser_plaintext.add_argument(
+        "-o", "--output-file", required=True, help="Output file."
+    )
+    parser_plaintext.set_defaults(func=plaintext_main)
+
+
 def _add_fromtext_arguments(parser_fromtext):
     parser_fromtext.add_argument(
         "-i", "--input", required=True, help="Input JSON file with sentences."
     )
     parser_fromtext.add_argument(
-        "-o", "--output", help="Output audio file. If not provided, it will be derived from the input file."
+        "-o",
+        "--output",
+        help="Output audio file. If not provided, it will be derived from the input file.",
     )
     parser_fromtext.add_argument(
         "--transition-sound", required=True, help="Transition sound file."
@@ -38,22 +55,33 @@ def _add_fromtext_arguments(parser_fromtext):
         "--target-lang", required=True, help="Target language for text to speech."
     )
     parser_fromtext.add_argument(
-        "--target-lang-key", help="Key for target language in the input JSON. If not provided, it will be the same as target-lang."
+        "--target-lang-key",
+        help="Key for target language in the input JSON. If not provided, it will be the same as target-lang.",
     )
     parser_fromtext.add_argument(
         "--tr-lang", required=True, help="Translation language for text to speech."
     )
     parser_fromtext.add_argument(
-        "--tr-lang-key", help="Key for translation language in the input JSON. If not provided, it will be the same as tr-lang."
+        "--tr-lang-key",
+        help="Key for translation language in the input JSON. If not provided, it will be the same as tr-lang.",
     )
     parser_fromtext.add_argument(
-        "--interval", type=int, default=1000, help="Interval in milliseconds between repetitions. Default is 1000."
+        "--interval",
+        type=int,
+        default=1000,
+        help="Interval in milliseconds between repetitions. Default is 1000.",
     )
     parser_fromtext.add_argument(
-        "--target-repeat", type=int, default=1, help="Number of times to repeat the target language. Default is 1."
+        "--target-repeat",
+        type=int,
+        default=1,
+        help="Number of times to repeat the target language. Default is 1.",
     )
     parser_fromtext.add_argument(
-        "--translation-repeat", type=int, default=1, help="Number of times to repeat the translation. Default is 1."
+        "--translation-repeat",
+        type=int,
+        default=1,
+        help="Number of times to repeat the translation. Default is 1.",
     )
     parser_fromtext.add_argument(
         "-v", "--verbose", action="store_true", help="Enable verbose output."
