@@ -101,3 +101,8 @@ To automatically format your code to comply with PEP8, run:
 black .
 ```
 
+# TODO
+
+- Can split Japanese text into sentence
+- Can translate subtitle file as a whole
+- [P2] Develop GUI / web UI for this program
