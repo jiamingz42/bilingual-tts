@@ -1,6 +1,6 @@
 import argparse
-from dualang.fromtext import fromtext_main
-from dualang.fromaudio import fromaudio_main
+from dualang.command.fromtext import fromtext_main
+from dualang.command.fromaudio import fromaudio_main
 from dualang.command.plaintext import plaintext_main
 
 
