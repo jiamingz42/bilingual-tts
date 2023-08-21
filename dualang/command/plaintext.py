@@ -1,4 +1,5 @@
 import os
+import sys
 import tempfile
 
 from gtts import gTTS  # type: ignore
@@ -61,6 +62,10 @@ def create_audio(
     return final_audio
 
 def plaintext_main(args):
+    if "DEEPL_API_KEY" not in os.environ:
+        print("Error: The DEEPL_API_KEY environment variable is not set. Please set it to your DeepL API key.")
+        sys.exit(1)
+
     with open(args.input_file, 'r', encoding='utf-8') as file:
         text = file.read()
 
@@ -77,7 +82,7 @@ def plaintext_main(args):
     user_input = input("Do you want to continue? (y/n): ")
     if user_input.lower() not in ['y', 'yes']:
         print("Exiting...")
-        exit(0)
+        sys.exit(0)
 
     # Generate TTS audio segments for each sentence
     final_audio = create_audio(
