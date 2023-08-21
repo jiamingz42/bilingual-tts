@@ -42,6 +42,12 @@ def _add_plaintext_arguments(parser_plaintext):
     parser_plaintext.add_argument(
         "-o", "--output-file", required=True, help="Output file."
     )
+    parser_plaintext.add_argument(
+        "--transition-sound", required=True, help="Transition sound file."
+    )
+    parser_plaintext.add_argument(
+        "-v", "--verbose", action="store_true", help="Enable verbose output."
+    )
     parser_plaintext.set_defaults(func=plaintext_main)
 
 
