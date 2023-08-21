@@ -25,8 +25,14 @@ def main():
     # Parse the arguments
     args = parser.parse_args()
 
-    # Call the function specified by the "func" attribute of args
-    args.func(args)
+    # Check if the "func" attribute is set
+    if hasattr(args, 'func'):
+        # Call the function specified by the "func" attribute of args
+        args.func(args)
+    else:
+        # Print usage message and exit
+        parser.print_usage()
+        exit(1)
 
 
 def _add_plaintext_arguments(parser_plaintext):
