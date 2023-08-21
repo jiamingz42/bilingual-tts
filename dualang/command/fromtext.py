@@ -8,11 +8,9 @@ import tempfile
 
 def create_audio(
     sentences,
-    output_file,
     transition_sound,
     target_lang,
     target_key,
-    tr_lang,
     tr_key,
     interval,
     target_repeat,
@@ -60,8 +58,8 @@ def create_audio(
             # Add to the final audio with a "ding" sound
             final_audio += combined_audio + transition_sound
 
-    # Save the final audio
-    final_audio.export(output_file, format="mp3")
+    return final_audio
+
 
 
 def fromtext_main(args):
@@ -86,16 +84,17 @@ def fromtext_main(args):
     target_lang_key = args.target_lang_key if args.target_lang_key else args.target_lang
     tr_lang_key = args.tr_lang_key if args.tr_lang_key else args.tr_lang
 
-    create_audio(
-        sentences,
-        args.output,
-        args.transition_sound,
-        args.target_lang,
-        target_lang_key,
-        args.tr_lang,
-        tr_lang_key,
-        args.interval,
-        args.target_repeat,
-        args.translation_repeat,
-        args.verbose,
+    final_audio = create_audio(
+        sentences = sentences,
+        transition_sound = args.transition_sound,
+        target_lang = args.target_lang,
+        target_key = target_lang_key,
+        tr_key = tr_lang_key,
+        interval = args.interval,
+        target_repeat = args.target_repeat,
+        translation_repeat = args.translation_repeat,
+        verbose = args.verbose,
     )
+
+    # Save the final audio
+    final_audio.export(args.output, format="mp3")
