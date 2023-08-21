@@ -7,6 +7,7 @@ from pydub import AudioSegment  # type: ignore
 from tqdm import tqdm
 
 from dualang.split_japanese_text import split_japanese_text
+from dualang.translator import build_translator, TranslationStrategy
 
 
 def create_audio(
@@ -16,6 +17,7 @@ def create_audio(
     interval,
     target_repeat,
     translation_repeat,
+    translate_func,
     verbose,
 ):
     final_audio = AudioSegment.silent(duration=0)
@@ -31,11 +33,10 @@ def create_audio(
             pbar.set_postfix_str(f"Processing: {sentence}")
             pbar.update()
 
-            target_text = sentence
-            translation_text = "hello world" # TODO
+            translation_text = translate_func(sentence, target_lang="ja")
 
             # Convert target language text to speech
-            target_tts = gTTS(text=target_text, lang=target_lang)
+            target_tts = gTTS(text=sentence, lang=target_lang)
             with tempfile.NamedTemporaryFile(delete=False) as target_file:
                 target_tts.save(target_file.name)
                 target_audio = AudioSegment.from_mp3(target_file.name)
@@ -84,6 +85,12 @@ def plaintext_main(args):
         print("Exiting...")
         sys.exit(0)
 
+    try:
+        translate_func = build_translator(TranslationStrategy(args.tr_strategy))
+    except ValueError as e:
+        print(str(e))
+        exit(1)
+
     # Generate TTS audio segments for each sentence
     final_audio = create_audio(
         sentences = sentences,
@@ -92,6 +99,7 @@ def plaintext_main(args):
         interval = 100,
         target_repeat = 3,
         translation_repeat = 1,
+        translate_func=translate_func,
         verbose = args.verbose,
     )
 
