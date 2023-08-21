@@ -21,7 +21,6 @@ from pydub import playback
 from typing import Callable, Optional
 
 import pydub  # type: ignore
-import deepl  # type: ignore
 
 from gtts import gTTS  # type: ignore
 from pydub import AudioSegment  # type: ignore
@@ -32,26 +31,11 @@ from dualang.audio_loader import load_audio_segment
 from dualang.args_helper import get_subtitle_file_name, get_output_file_name
 
 
-def fake_translate_func(text: str, target_lang: str) -> str:
-    """
-    A fake translation function that always returns "Hello world".
-
-    Args:
-        text (str): The text to be translated.
-        target_lang (str): The target language for the translation.
-
-    Returns:
-        str: The translated text.
-    """
-    return f"[{target_lang}] Hello world"
-
-
 def create_audio_from_audio(
     input_audio: str,
     subtitle_data: list,
     output_file: str,
     transition_sound: str,
-    repeat_count: int,
     tr_lang: str,
     verbose: bool,
     translate_func: Callable[[str, str], str],
@@ -143,14 +127,12 @@ def fromaudio_main(args):
         )
         exit(1)
 
-    translate_func: Callable[[str, str], str]
-    if args.tr_strategy == "deepl":
-        translator = deepl.Translator(os.environ["DEEPL_API_KEY"])
-        translate_func = translator.translate_text
-    elif args.tr_strategy == "fake":
-        translate_func = fake_translate_func
-    else:
-        print(f"Error: Unsupported translation strategy {args.tr_strategy}.")
+    from dualang.translator import build_translator, TranslationStrategy
+
+    try:
+        translate_func = build_translator(TranslationStrategy(args.tr_strategy))
+    except ValueError as e:
+        print(str(e))
         exit(1)
 
     # If subtitle file is not provided, derive it from the input audio file
@@ -182,7 +164,6 @@ def fromaudio_main(args):
         subtitle_data,
         args.output_file,
         args.transition_sound,
-        args.repeat_count,
         args.tr_lang,
         args.verbose,
         translate_func=translate_func,
