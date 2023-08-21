@@ -3,9 +3,8 @@ import re
 
 def split_japanese_text(text):
     # Check if there are any Japanese punctuation marks in the text
-    if not re.search(r'。|！|？', text):
+    if not re.search(r"。|！|？", text):
         return [text.strip()] if text.strip() else []
-
 
     # Split the text based on common Japanese punctuation marks, but preserve the delimiters
     sentences = re.split(r"(。|！|？)", text)
