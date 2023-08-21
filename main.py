@@ -22,6 +22,14 @@ def main():
     parser_plaintext = subparsers.add_parser("plaintext")
     _add_plaintext_arguments(parser_plaintext)
 
+    # Create a parser for the "plaintext" command
+    parser_plaintext = subparsers.add_parser("plaintext")
+    _add_plaintext_arguments(parser_plaintext)
+
+    # Create a parser for the "plaintext" command
+    parser_plaintext = subparsers.add_parser("plaintext")
+    _add_plaintext_arguments(parser_plaintext)
+
     # Parse the arguments
     args = parser.parse_args()
 
