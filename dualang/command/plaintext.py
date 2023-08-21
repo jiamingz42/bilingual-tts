@@ -12,8 +12,6 @@ def create_audio(
     sentences,
     transition_sound,
     target_lang,
-    target_key,
-    tr_key,
     interval,
     target_repeat,
     translation_repeat,
@@ -63,9 +61,8 @@ def create_audio(
     return final_audio
 
 def plaintext_main(args):
-    # Read the input text file
-    with open(args.input_file, 'r') as f:
-        text = f.read()
+    with open(args.input_file, 'r', encoding='utf-8') as file:
+        text = file.read()
 
     output_file = args.output_file or os.path.splitext(args.input)[0] + '.mp3'
 
@@ -73,16 +70,14 @@ def plaintext_main(args):
     sentences = split_japanese_text(text)
 
     print("Sentences:")
-    for i, s in enumerate(sentences):
-        print(f" {i:03d} {s}")
+    for i, sentence in enumerate(sentences):
+        print(f" {i:03d} {sentence}")
 
     # Generate TTS audio segments for each sentence
     final_audio = create_audio(
         sentences = sentences,
         transition_sound = args.transition_sound,
         target_lang = "ja",
-        target_key = "ja",
-        tr_key = "en-US",
         interval = 100,
         target_repeat = 3,
         translation_repeat = 1,
@@ -90,4 +85,4 @@ def plaintext_main(args):
     )
 
     # Save the final audio
-    final_audio.export(output_file, format="mp3")
+    final_audio.export(output_file, format="mp3", tags=None)
