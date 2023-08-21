@@ -73,6 +73,12 @@ def plaintext_main(args):
     for i, sentence in enumerate(sentences):
         print(f" {i:03d} {sentence}")
 
+    # Confirm with the user if they want to continue
+    user_input = input("Do you want to continue? (y/n): ")
+    if user_input.lower() not in ['y', 'yes']:
+        print("Exiting...")
+        exit(0)
+
     # Generate TTS audio segments for each sentence
     final_audio = create_audio(
         sentences = sentences,
