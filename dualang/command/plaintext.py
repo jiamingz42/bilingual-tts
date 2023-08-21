@@ -1,7 +1,7 @@
 import os
 
 from dualang.split_japanese_text import split_japanese_text
-from dualang.command.fromtext import create_audio
+from dualang.command.fromaudio import create_audio
 
 
 def plaintext_main(args):
@@ -17,7 +17,7 @@ def plaintext_main(args):
         print(f" {i:03d} {s}")
 
     # Generate TTS audio segments for each sentence
-    audio_segments = create_audio() # TODO
+    audio_segments = create_audio(sentences, args)
 
     # # Combine the audio segments into a single audio file
     # output_file = args.output or os.path.splitext(args.input)[0] + '.mp3'
