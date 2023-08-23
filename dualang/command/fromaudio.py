@@ -29,6 +29,7 @@ from tqdm import tqdm
 from dualang.subtitle_loader import load_subtitle_file
 from dualang.audio_loader import load_audio_segment
 from dualang.args_helper import get_subtitle_file_name, get_output_file_name
+from dualang.util import add_label_to_file
 
 
 def create_audio_from_audio(
@@ -116,6 +117,9 @@ def create_audio_from_audio(
 
     # Save the final audio to the output file
     final_audio.export(output_file, format="mp3")
+
+    # Add label to the final audio file
+    add_label_to_file(output_file, "bilingual-audio")
 
 
 def fromaudio_main(args):
