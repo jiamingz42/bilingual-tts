@@ -73,22 +73,7 @@ def create_audio_from_audio(
         )  # 1 second silent interval
         repeated_audio_segment = repeated_audio_segment * 3
 
-        # Translate the subtitle text using the provided translate function
-        translation = translate_func(subtitle.text, target_lang=tr_lang)
-
-        # Convert the translation into speech using gTTS
-        # Use the text attribute of the TextResult object
-        tts = gTTS(text=translation.text, lang=tr_lang)
-
-        # Generate a hash of the subtitle text
-        subtitle_hash = hashlib.md5(subtitle.text.encode()).hexdigest()
-
-        # Save the translated speech to a temporary file using the hash as the filename
-        tts_file = os.path.join(temp_dir, f"{subtitle_hash}.mp3")
-        tts.save(tts_file)
-
-        # Load the translated speech as an audio segment
-        tts_audio_segment = AudioSegment.from_file(tts_file)
+        tts_audio_segment = get_translation_audio(subtitle.text, tr_lang, translate_func, temp_dir)
 
         # Append the TTS translation to the repeated audio segments with a silent interval
         repeated_audio_segment += (
@@ -173,3 +158,22 @@ def fromaudio_main(args):
         translate_func=translate_func,
         interval=args.silent_interval,
     )
+def get_translation_audio(subtitle_text: str, tr_lang: str, translate_func: Callable[[str, str], str], temp_dir: str) -> AudioSegment:
+    # Translate the subtitle text using the provided translate function
+    translation = translate_func(subtitle_text, target_lang=tr_lang)
+
+    # Convert the translation into speech using gTTS
+    # Use the text attribute of the TextResult object
+    tts = gTTS(text=translation.text, lang=tr_lang)
+
+    # Generate a hash of the subtitle text
+    subtitle_hash = hashlib.md5(subtitle_text.encode()).hexdigest()
+
+    # Save the translated speech to a temporary file using the hash as the filename
+    tts_file = os.path.join(temp_dir, f"{subtitle_hash}.mp3")
+    tts.save(tts_file)
+
+    # Load the translated speech as an audio segment
+    tts_audio_segment = AudioSegment.from_file(tts_file)
+
+    return tts_audio_segment
