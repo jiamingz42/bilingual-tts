@@ -8,6 +8,7 @@ class TranslationStrategy(Enum):
     DEEPL = "deepl"
     FAKE = "fake"
 
+
 def build_translator(strategy: TranslationStrategy) -> Callable[[str, str], str]:
     if strategy == TranslationStrategy.DEEPL:
         translator = deepl.Translator(os.environ["DEEPL_API_KEY"])
@@ -20,4 +21,3 @@ def build_translator(strategy: TranslationStrategy) -> Callable[[str, str], str]
 
 def _fake_translate_func(text: str, target_lang: str) -> str:
     return f"[{target_lang}] Hello world"
-

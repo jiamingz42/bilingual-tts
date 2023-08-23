@@ -61,7 +61,6 @@ def create_audio(
     return final_audio
 
 
-
 def fromtext_main(args):
     # Validate the input file
     try:
@@ -85,15 +84,15 @@ def fromtext_main(args):
     tr_lang_key = args.tr_lang_key if args.tr_lang_key else args.tr_lang
 
     final_audio = create_audio(
-        sentences = sentences,
-        transition_sound = args.transition_sound,
-        target_lang = args.target_lang,
-        target_key = target_lang_key,
-        tr_key = tr_lang_key,
-        interval = args.interval,
-        target_repeat = args.target_repeat,
-        translation_repeat = args.translation_repeat,
-        verbose = args.verbose,
+        sentences=sentences,
+        transition_sound=args.transition_sound,
+        target_lang=args.target_lang,
+        target_key=target_lang_key,
+        tr_key=tr_lang_key,
+        interval=args.interval,
+        target_repeat=args.target_repeat,
+        translation_repeat=args.translation_repeat,
+        verbose=args.verbose,
     )
 
     # Save the final audio

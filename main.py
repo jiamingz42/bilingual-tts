@@ -26,7 +26,7 @@ def main():
     args = parser.parse_args()
 
     # Check if the "func" attribute is set
-    if hasattr(args, 'func'):
+    if hasattr(args, "func"):
         # Call the function specified by the "func" attribute of args
         args.func(args)
     else:

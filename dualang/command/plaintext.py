@@ -62,15 +62,18 @@ def create_audio(
 
     return final_audio
 
+
 def plaintext_main(args):
     if "DEEPL_API_KEY" not in os.environ:
-        print("Error: The DEEPL_API_KEY environment variable is not set. Please set it to your DeepL API key.")
+        print(
+            "Error: The DEEPL_API_KEY environment variable is not set. Please set it to your DeepL API key."
+        )
         sys.exit(1)
 
-    with open(args.input_file, 'r', encoding='utf-8') as file:
+    with open(args.input_file, "r", encoding="utf-8") as file:
         text = file.read()
 
-    output_file = args.output_file or os.path.splitext(args.input)[0] + '.mp3'
+    output_file = args.output_file or os.path.splitext(args.input)[0] + ".mp3"
 
     # Split the text into sentences
     sentences = split_japanese_text(text)
@@ -81,7 +84,7 @@ def plaintext_main(args):
 
     # Confirm with the user if they want to continue
     user_input = input("Do you want to continue? (y/n): ")
-    if user_input.lower() not in ['y', 'yes']:
+    if user_input.lower() not in ["y", "yes"]:
         print("Exiting...")
         sys.exit(0)
 
@@ -93,14 +96,14 @@ def plaintext_main(args):
 
     # Generate TTS audio segments for each sentence
     final_audio = create_audio(
-        sentences = sentences,
-        transition_sound = args.transition_sound,
-        target_lang = "ja",
-        interval = 100,
-        target_repeat = 3,
-        translation_repeat = 1,
+        sentences=sentences,
+        transition_sound=args.transition_sound,
+        target_lang="ja",
+        interval=100,
+        target_repeat=3,
+        translation_repeat=1,
         translate_func=translate_func,
-        verbose = args.verbose,
+        verbose=args.verbose,
     )
 
     # Save the final audio
