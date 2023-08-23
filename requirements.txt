@@ -7,3 +7,4 @@ pyass
 ffmpeg-python
 simpleaudio
 webvtt-py
+xattr

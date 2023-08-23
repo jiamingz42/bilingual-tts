@@ -55,7 +55,7 @@ def create_audio_from_audio(
 
     # Iterate over the sentences in the subtitle file
     for subtitle in tqdm(subtitle_data, desc="Processing sentences"):
-        if not subtitle.text:
+        if not subtitle.text.strip():
             continue
 
         # Extract the start and end times from the subtitle
