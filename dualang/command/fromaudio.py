@@ -59,29 +59,20 @@ def create_audio_from_audio(
         if not subtitle.text.strip():
             continue
 
-        # Extract the start and end times from the subtitle
         # Assuming subtitle.start and subtitle.end are in milliseconds
         start_time = subtitle.start
         end_time = subtitle.end
 
-        # Extract the corresponding audio segment from the input audio
         audio_segment = input_audio[start_time:end_time]
-
-        # Repeat the audio segment three times with a silent interval in between
-        repeated_audio_segment = audio_segment + AudioSegment.silent(
-            duration=1000
-        )  # 1 second silent interval
-        repeated_audio_segment = repeated_audio_segment * 3
-
+        silent = AudioSegment.silent(duration=interval)
         tts_audio_segment = get_translation_audio(subtitle.text, tr_lang, translate_func, temp_dir)
 
-        # Append the TTS translation to the repeated audio segments with a silent interval
-        repeated_audio_segment += (
-            AudioSegment.silent(duration=interval) + tts_audio_segment
+        # Repeat the audio segment three times with a silent interval in between
+        repeated_audio_segment = (
+            (audio_segment + silent) * 2 +
+            (tts_audio_segment + silent) * 1 +
+            (audio_segment + silent) * 2
         )
-
-        # Append the original extracted audio segment one more time with a silent interval
-        repeated_audio_segment += AudioSegment.silent(duration=interval) + audio_segment
 
         # Append the repeated audio segment to the list of audio segments
         audio_segments.append(repeated_audio_segment)
