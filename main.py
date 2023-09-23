@@ -53,7 +53,8 @@ def _add_condense_audio_arguments(parser_condense_audio):
     )
     parser_condense_audio.add_argument(
         "--subtitle",
-        help="Subtitle file to process. Supports .srt, .ass and .vtt formats. If not provided, it will be derived from the input audio file.",
+        required=True,
+        help="Subtitle file to process. Supports .srt, .ass and .vtt formats.",
     )
     parser_condense_audio.set_defaults(func=condense_audio_main)  # Placeholder function
 
