@@ -2,6 +2,7 @@ import argparse
 from dualang.command.fromtext import fromtext_main
 from dualang.command.fromaudio import fromaudio_main
 from dualang.command.plaintext import plaintext_main
+from dualang.command.condense_audio import condense_audio_main
 
 
 def main():
