@@ -22,6 +22,10 @@ def main():
     parser_plaintext = subparsers.add_parser("plaintext")
     _add_plaintext_arguments(parser_plaintext)
 
+    # Create a parser for the "condense-audio" command
+    parser_condense_audio = subparsers.add_parser("condense-audio")
+    _add_condense_audio_arguments(parser_condense_audio)
+
     # Parse the arguments
     args = parser.parse_args()
 
@@ -34,6 +38,19 @@ def main():
         parser.print_usage()
         exit(1)
 
+def _add_condense_audio_arguments(parser_condense_audio):
+    parser_condense_audio.add_argument(
+        "-i", "--input", required=True, help="Input audio file."
+    )
+    parser_condense_audio.add_argument(
+        "-o", "--output", help="Output audio file. If not provided, it will be derived from the input file."
+    )
+    parser_condense_audio.add_argument(
+        "--padding",
+        type=int,
+        help="Padding in milliseconds between audio segments. If not provided, it will default to 0.",
+    )
+    parser_condense_audio.set_defaults(func=condense_audio_main)  # Placeholder function
 
 def _add_plaintext_arguments(parser_plaintext):
     parser_plaintext.add_argument(
