@@ -28,7 +28,7 @@ def create_epub(subtitles, output, epub_title):
 
     chapters = []
     for i, subtitle in enumerate(subtitles):
-        chapter_name = subtitle.split('.')[0].replace('_', ' ').replace('-', ' ').replace(' ja', '')
+        chapter_name = os.path.basename(subtitle).split('.')[0].replace('_', ' ').replace('-', ' ').replace(' ja', '')
 
         # create chapter
         c1 = epub.EpubHtml(title=chapter_name, file_name=f"chap_{i:0d}.xhtml", lang="ja")
@@ -42,7 +42,7 @@ def create_epub(subtitles, output, epub_title):
 
 
     book.toc = (
-        (epub.Section("Simple book"), chapters),
+        (epub.Section(epub_title), chapters),
     )
 
     book.add_item(epub.EpubNcx())
