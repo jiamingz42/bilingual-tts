@@ -4,7 +4,7 @@ from ebooklib import epub
 
 def read_srt_files(directory):
     """Read all SRT files in a directory."""
-    srt_files = [f for f in os.listdir(directory) if f.endswith('.srt')]
+    srt_files = [directory + '/' + f for f in os.listdir(directory) if f.endswith('.srt')]
     return sorted(srt_files)
 
 def parse_srt_file(file_path):
@@ -18,25 +18,52 @@ def add_chapter(book, title, filename, content):
     book.add_item(chapter)
     return chapter
 
-def create_epub(srt_files, directory, epub_title):
-    """Create an EPUB file with a table of contents, where each chapter corresponds to a subtitle file."""
+def create_epub(subtitles, output, epub_title):
     book = epub.EpubBook()
+
+    # set metadata
     book.set_identifier('id123456')
     book.set_title(epub_title)
     book.set_language('ja')
-    book.add_author("Author Authorowski")
 
     chapters = []
-    for i, srt_file in enumerate(srt_files):
-        chapter = epub.EpubHtml(title="intro", file_name=f'chap_{i}.xhtml', lang='en')
-        chapter.content = "<h1>hi world</h1>"
-        book.add_item(chapter)
+    for i, subtitle in enumerate(subtitles):
+        chapter_name = subtitle.split('.')[0].replace('_', ' ').replace('-', ' ').replace(' ja', '')
+
+        # create chapter
+        c1 = epub.EpubHtml(title=chapter_name, file_name=f"chap_{i:0d}.xhtml", lang="ja")
+        c1.content = f"<h1>{chapter_name}</h1>"
+        for line in  parse_srt_file(subtitle):
+            c1.content += f"<p>{line}</p>"
+
+        book.add_item(c1)
+
+        chapters.append(c1)
+
+
+    book.toc = (
+        (epub.Section("Simple book"), chapters),
+    )
 
     book.add_item(epub.EpubNcx())
     book.add_item(epub.EpubNav())
 
-    epub.write_epub(epub_title + '.epub', book)
+    style = "BODY {color: white;}"
+    nav_css = epub.EpubItem(
+        uid="style_nav",
+        file_name="style/nav.css",
+        media_type="text/css",
+        content=style,
+    )
+
+    book.add_item(nav_css)
+
+    book.spine = ["nav"] + chapters
+
+    epub.write_epub(output, book)
 
 def create_epub_main(args):
     subtitles = sorted(read_srt_files(args.input_folder))
-    create_epub(subtitles, args.input_folder, args.title)
+
+    print(args.output)
+    create_epub(subtitles, args.output, args.title)
