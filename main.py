@@ -195,7 +195,7 @@ def _add_create_epub_arguments(parser_create_epub):
         "--title", required=True, help="Title of the epub."
     )
     parser_create_epub.add_argument(
-        "--output", required=True, help="Output epub file."
+        "--output", required=True, help="Output epub file. If the file extension is not provided, '.epub' will be appended."
     )
     parser_create_epub.set_defaults(func=create_epub_main)
 

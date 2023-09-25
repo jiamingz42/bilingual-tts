@@ -62,8 +62,23 @@ def create_epub(subtitles, output, epub_title):
 
     epub.write_epub(output, book)
 
+import os
+import sys
+
 def create_epub_main(args):
     subtitles = sorted(read_srt_files(args.input_folder))
+
+    # Ensure output file ends with .epub
+    if not args.output.endswith('.epub'):
+        args.output += '.epub'
+
+    # Check if output file already exists
+    if os.path.isfile(args.output):
+        print(f"File {args.output} already exists. Do you want to overwrite it? [y/N]")
+        choice = input().lower()
+        if choice not in ['y', 'yes']:
+            print("Aborted.")
+            sys.exit(0)
 
     print(args.output)
     create_epub(subtitles, args.output, args.title)
