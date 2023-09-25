@@ -3,6 +3,7 @@ from dualang.command.fromtext import fromtext_main
 from dualang.command.fromaudio import fromaudio_main
 from dualang.command.plaintext import plaintext_main
 from dualang.command.condense_audio import condense_audio_main
+from dualang.command.create_epub import create_epub_main
 
 
 def main():
@@ -26,6 +27,10 @@ def main():
     # Create a parser for the "condense-audio" command
     parser_condense_audio = subparsers.add_parser("condense-audio")
     _add_condense_audio_arguments(parser_condense_audio)
+
+    # Create a parser for the "create-epub" command
+    parser_create_epub = subparsers.add_parser("create-epub")
+    _add_create_epub_arguments(parser_create_epub)
 
     # Parse the arguments
     args = parser.parse_args()
@@ -182,6 +187,17 @@ def _add_fromaudio_arguments(parser_fromaudio):
     )
     parser_fromaudio.set_defaults(func=fromaudio_main)
 
+def _add_create_epub_arguments(parser_create_epub):
+    parser_create_epub.add_argument(
+        "--input-folder", required=True, help="Input folder containing text files."
+    )
+    parser_create_epub.add_argument(
+        "--title", required=True, help="Title of the epub."
+    )
+    parser_create_epub.add_argument(
+        "--output", required=True, help="Output epub file."
+    )
+    parser_create_epub.set_defaults(func=create_epub_main)
 
 if __name__ == "__main__":
     main()
